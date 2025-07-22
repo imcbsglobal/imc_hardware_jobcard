@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Job Card List</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: #f4f8fb;
+        margin: 0;
+        padding: 20px;
+    }
+
+    h2 {
+        text-align: center;
+        color: #333;
+        margin-bottom: 25px;
+        font-size: 28px;
+    }
+
+    .table-container {
+        max-width: 1400px;
+        margin: auto;
+        background: #fff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+        overflow-x: auto;
+    }
+
+    .btn-add {
+        display: inline-block;
+        padding: 12px 18px;
+        background: #28a745;
+        color: #fff;
+        text-decoration: none;
+        font-size: 16px;
+        font-weight: bold;
+        border-radius: 6px;
+        margin-bottom: 20px;
+        transition: 0.3s;
+    }
+    .btn-add:hover { background: #218838; }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 15px;
+    }
+
+    thead {
+        background: #007bff;
+        color: #fff;
+    }
+
+    th, td {
+        padding: 12px 15px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+        vertical-align: middle;
+    }
+
+    tr:hover { background: #f1f1f1; }
+
+    .icon-actions {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+    }
+
+    .icon-btn {
+        font-size: 18px;
+        color: #007bff;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+    .icon-btn:hover {
+        color: #0056b3;
+    }
+
+    /* Hidden details (notes and images) */
+    .hidden-section {
+        display: none;
+        margin-top: 8px;
+    }
+
+    .notes-text {
+        background: #f8f9fa;
+        padding: 6px 10px;
+        border-radius: 4px;
+        font-size: 13px;
+        color: #555;
+        border-left: 3px solid #007bff;
+    }
+
+    .images-list {
+        display: flex;
+        gap: 6px;
+        flex-wrap: wrap;
+        margin-top: 6px;
+    }
+
+    .images-list img {
+        width: 60px;
+        height: 60px;
+        object-fit: cover;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+        cursor: pointer;
+        transition: transform 0.2s;
+    }
+
+    .images-list img:hover {
+        transform: scale(1.5);
+        z-index: 100;
+        position: relative;
+    }
+
+    .no-data {
+        color: #999;
+        font-style: italic;
+    }
+
+    .btn-edit, .btn-delete {
+        display: inline-block;
+        padding: 6px 10px;
+        color: #fff;
+        text-decoration: none;
+        font-size: 12px;
+        border-radius: 4px;
+        margin-right: 5px;
+        transition: 0.3s;
+    }
+
+    .btn-edit { background: #007bff; }
+    .btn-edit:hover { background: #0056b3; }
+
+    .btn-delete { background: #dc3545; }
+    .btn-delete:hover { background: #c82333; }
+
+    @media(max-width: 992px) {
+        th, td { font-size: 14px; }
+    }
+</style>
+</head>
+<body>
+
+<h2>Job Card List</h2>
+
+<div class="table-container">
+    <a href="{% url 'jobcard_create' %}" class="btn-add"><i class="fas fa-plus"></i> Add New Job Card</a>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Customer</th>
+                <th>Address</th>
+                <th>Phone</th>
+                <th>Item</th>
+                <th>Complaints</th>
+                <th>Serial</th>
+                <th>Config</th>
+                <th>General Notes</th>
+                <th>Created</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for job in jobcards %}
+            <tr>
+                <td>{{ job.id }}</td>
+                <td>{{ job.customer }}</td>
+                <td>{{ job.address }}</td>
+                <td>{{ job.phone }}</td>
+                <td>{{ job.item }}</td>
+                <td>
+                    {% if job.complaints.all %}
+                        {% for complaint in job.complaints.all %}
+                            <div>
+                                <strong>{{ complaint.description }}</strong>
+                                <div class="icon-actions">
+                                    {% if complaint.notes %}
+                                        <i class="fas fa-sticky-note icon-btn" title="View Note" onclick="toggleSection('note-{{ complaint.id }}')"></i>
+                                    {% endif %}
+                                    {% if complaint.images.all %}
+                                        <i class="fas fa-image icon-btn" title="View Images" onclick="toggleSection('img-{{ complaint.id }}')"></i>
+                                    {% endif %}
+                                </div>
+
+                                <!-- Notes Section -->
+                                <div class="hidden-section" id="note-{{ complaint.id }}">
+                                    <div class="notes-text">{{ complaint.notes }}</div>
+                                </div>
+
+                                <!-- Images Section -->
+                                <div class="hidden-section" id="img-{{ complaint.id }}">
+                                    <div class="images-list">
+                                        {% for img in complaint.images.all %}
+                                            <img src="{{ img.image.url }}" alt="Complaint Image">
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <span class="no-data">No Complaints</span>
+                    {% endif %}
+                </td>
+                <td>{{ job.serial|default:"N/A" }}</td>
+                <td>{{ job.config|default:"N/A" }}</td>
+                <td>{{ job.notes|default:"N/A" }}</td>
+                <td>{{ job.created_at|date:"M d, Y H:i" }}</td>
+                <td>
+                    <a href="{% url 'jobcard_edit' job.pk %}" class="btn-edit"><i class="fas fa-edit"></i></a>
+                    <a href="{% url 'jobcard_delete' job.pk %}" class="btn-delete"><i class="fas fa-trash"></i></a>
+                </td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td colspan="11" style="text-align:center;">No Job Cards Found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<script>
+function toggleSection(id) {
+    const section = document.getElementById(id);
+    section.style.display = (section.style.display === 'block') ? 'none' : 'block';
+}
+</script>
+
+</body>
+</html>

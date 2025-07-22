@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Create Job Card</title>
+<style>
+    body {
+        font-family: 'Segoe UI', Tahoma, sans-serif;
+        background: #f4f8fb;
+        padding: 30px;
+        margin: 0;
+    }
+
+    .form-container {
+        background: #fff;
+        max-width: 900px;
+        margin: auto;
+        padding: 30px 35px;
+        border-radius: 12px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+        text-align: center;
+        margin-bottom: 20px;
+        font-size: 28px;
+        color: #222;
+    }
+
+    .form-group {
+        margin-bottom: 16px;
+    }
+
+    .form-group label {
+        display: block;
+        font-weight: bold;
+        margin-bottom: 8px;
+        color: #333;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        width: 100%;
+        padding: 12px 14px;
+        font-size: 15px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        outline: none;
+        transition: 0.3s;
+        box-sizing: border-box;
+        background: #fafafa;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+        border-color: #28a745;
+        background: #fff;
+        box-shadow: 0 0 6px rgba(40, 167, 69, 0.3);
+    }
+
+    .form-group textarea {
+        min-height: 90px;
+        resize: vertical;
+    }
+
+    #complaintsSection,
+    #detailsSection {
+        display: none;
+        margin-top: 20px;
+        padding: 18px;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        background: #f9f9f9;
+    }
+
+    #complaintsSection h3,
+    #detailsSection h3 {
+        margin-bottom: 15px;
+        font-size: 20px;
+        color: #444;
+        text-align: center;
+    }
+
+    .complaint-block {
+        padding: 18px;
+        margin-bottom: 14px;
+        background: #fff;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+
+    .complaint-block h4 {
+        margin-bottom: 10px;
+        font-size: 16px;
+        color: #333;
+    }
+
+    .btn-add {
+        display: inline-block;
+        padding: 10px 16px;
+        background: #28a745;
+        color: #fff;
+        font-size: 15px;
+        font-weight: bold;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        margin-top: 12px;
+        transition: 0.3s;
+    }
+
+    .btn-add:hover {
+        background: #218838;
+    }
+
+    .btn-remove {
+        background: #dc3545;
+        color: #fff;
+        border: none;
+        padding: 6px 10px;
+        border-radius: 6px;
+        cursor: pointer;
+        margin-top: 8px;
+        font-size: 14px;
+    }
+
+    .btn-remove:hover {
+        background: #c82333;
+    }
+
+    .btn-submit {
+        width: 100%;
+        padding: 14px;
+        background: #000;
+        color: #fff;
+        font-size: 18px;
+        font-weight: bold;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: 0.3s;
+        margin-top: 20px;
+    }
+
+    .btn-submit:hover {
+        background: #333;
+    }
+
+    .btn-back {
+        display: inline-block;
+        padding: 10px 16px;
+        background: #6c757d;
+        color: #fff;
+        font-size: 15px;
+        font-weight: bold;
+        text-decoration: none;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        transition: 0.3s;
+    }
+
+    .btn-back:hover {
+        background: #545b62;
+        color: #fff;
+        text-decoration: none;
+    }
+
+    input[type="file"] {
+        margin-top: 10px;
+    }
+
+    /* Image Preview */
+    .preview-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 10px;
+    }
+
+    .preview-container img {
+        width: 90px;
+        height: 90px;
+        object-fit: cover;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .form-container {
+            padding: 20px;
+        }
+        h2 {
+            font-size: 24px;
+        }
+        .btn-submit {
+            font-size: 16px;
+        }
+    }
+</style>
+</head>
+<body>
+<div class="form-container">
+    <a href="{% url 'jobcard_list' %}" class="btn-back">← Back to List</a>
+    
+    <h2>Create Job Card</h2>
+    <form action="{% url 'jobcard_create' %}" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        
+        <div class="form-group">
+            <label>Customer Name *</label>
+            <input type="text" name="customer" required placeholder="Enter customer name">
+        </div>
+
+        <div class="form-group">
+            <label>Address *</label>
+            <textarea name="address" required placeholder="Enter full address"></textarea>
+        </div>
+
+        <div class="form-group">
+            <label>Phone *</label>
+            <input type="text" name="phone" required placeholder="Enter phone number">
+        </div>
+
+        <div class="form-group">
+            <label>Item *</label>
+            <select name="item" onchange="showSections()" required>
+                <option value="">Select Item</option>
+                <option value="Mouse">Mouse</option>
+                <option value="Keyboard">Keyboard</option>
+                <option value="CPU">CPU</option>
+                <option value="Laptop">Laptop</option>
+                <option value="Desktop">Desktop</option>
+                <option value="Printer">Printer</option>
+                <option value="Monitor">Monitor</option>
+                <option value="Other">Other</option>
+            </select>
+        </div>
+
+        <div id="complaintsSection">
+            <h3>Complaints & Images</h3>
+            <div id="complaintsContainer">
+                <div class="complaint-block" id="block-0">
+                    <h4>Complaint 1</h4>
+                    <div class="form-group">
+                        <label>Complaint Description</label>
+                        <input type="text" name="complaints[]" placeholder="Enter complaint" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Images (optional)</label>
+                        <input type="file" name="images[0][]" multiple accept="image/*" onchange="previewImages(event, 0)">
+                        <div class="preview-container" id="preview-0"></div>
+                    </div>
+                    <div class="form-group">
+                        <label>Notes (optional)</label>
+                        <input type="text" name="notes[]" placeholder="Enter additional notes">
+                    </div>
+                </div>
+            </div>
+            <button type="button" class="btn-add" onclick="addComplaint()">+ Add Another Complaint</button>
+        </div>
+
+        <div id="detailsSection">
+            <h3>Item Details</h3>
+            <div class="form-group">
+                <label>Serial Number</label>
+                <input type="text" name="serial" placeholder="Serial Number (optional)">
+            </div>
+            <div class="form-group">
+                <label>Configuration</label>
+                <input type="text" name="config" placeholder="Configuration details (optional)">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>General Notes</label>
+            <textarea name="general_notes" placeholder="Any additional notes about the job"></textarea>
+        </div>
+
+        <button class="btn-submit" type="submit">Create Job Card</button>
+    </form>
+</div>
+
+<script>
+let count = 1;
+
+function showSections() {
+    document.getElementById('complaintsSection').style.display = 'block';
+    document.getElementById('detailsSection').style.display = 'block';
+}
+
+function addComplaint() {
+    let container = document.getElementById('complaintsContainer');
+    let div = document.createElement('div');
+    div.classList.add('complaint-block');
+    div.id = `block-${count}`;
+    div.innerHTML = `
+        <h4>Complaint ${count + 1}</h4>
+        <div class="form-group">
+            <label>Complaint Description</label>
+            <input type="text" name="complaints[]" placeholder="Enter complaint" required>
+        </div>
+        <div class="form-group">
+            <label>Images (optional)</label>
+            <input type="file" name="images[${count}][]" multiple accept="image/*" onchange="previewImages(event, ${count})">
+            <div class="preview-container" id="preview-${count}"></div>
+        </div>
+        <div class="form-group">
+            <label>Notes (optional)</label>
+            <input type="text" name="notes[]" placeholder="Enter additional notes">
+        </div>
+        <button type="button" class="btn-remove" onclick="removeComplaint(${count})">Remove Complaint</button>
+    `;
+    container.appendChild(div);
+    count++;
+}
+
+function removeComplaint(index) {
+    const block = document.getElementById(`block-${index}`);
+    if (block) {
+        block.remove();
+        // Update complaint numbers
+        updateComplaintNumbers();
+    }
+}
+
+function updateComplaintNumbers() {
+    const blocks = document.querySelectorAll('.complaint-block');
+    blocks.forEach((block, index) => {
+        const heading = block.querySelector('h4');
+        if (heading) {
+            heading.textContent = `Complaint ${index + 1}`;
+        }
+    });
+}
+
+function previewImages(event, index) {
+    const files = event.target.files;
+    const previewContainer = document.getElementById('preview-' + index);
+    
+    // Clear existing previews for this complaint
+    previewContainer.innerHTML = '';
+    
+    for (let i = 0; i < files.length; i++) {
+        const img = document.createElement('img');
+        img.src = URL.createObjectURL(files[i]);
+        img.onload = () => URL.revokeObjectURL(img.src);
+        previewContainer.appendChild(img);
+    }
+}
+</script>
+</body>
+</html>
