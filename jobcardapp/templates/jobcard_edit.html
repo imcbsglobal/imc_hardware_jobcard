@@ -1,4 +1,3 @@
-{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,159 +5,24 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Edit Job Card</title>
 <style>
-    body {
-        font-family: Arial, sans-serif;
-        background: #f4f8fb;
-        padding: 30px;
-        margin: 0;
-    }
-
-    .form-container {
-        background: #fff;
-        max-width: 900px;
-        margin: auto;
-        padding: 25px 30px;
-        border-radius: 10px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    }
-
-    h2 {
-        text-align: center;
-        margin-bottom: 20px;
-        font-size: 26px;
-        color: #333;
-    }
-
-    .form-group {
-        margin-bottom: 15px;
-    }
-
-    .form-group label {
-        display: block;
-        font-weight: bold;
-        margin-bottom: 6px;
-        color: #333;
-    }
-
-    .form-group input,
-    .form-group select,
-    .form-group textarea {
-        width: 100%;
-        padding: 10px 12px;
-        font-size: 14px;
-        border: 1px solid #ccc;
-        border-radius: 6px;
-        outline: none;
-        box-sizing: border-box;
-    }
-
-    .form-group textarea {
-        min-height: 80px;
-        resize: vertical;
-    }
-
-    #complaintsSection,
-    #detailsSection {
-        margin-top: 15px;
-        padding: 15px;
-        border: 1px solid #ddd;
-        border-radius: 8px;
-        background: #fafafa;
-    }
-
-    .complaint-block {
-        padding: 15px;
-        margin-bottom: 12px;
-        background: #fff;
-        border: 1px solid #ccc;
-        border-radius: 8px;
-    }
-
-    .complaint-block h4 {
-        margin-bottom: 10px;
-        color: #444;
-    }
-
-    .btn-add {
-        display: inline-block;
-        padding: 8px 14px;
-        background: #28a745;
-        color: #fff;
-        font-size: 14px;
-        border: none;
-        border-radius: 6px;
-        cursor: pointer;
-        margin-top: 10px;
-    }
-
-    .btn-add:hover {
-        background: #218838;
-    }
-
-    .btn-submit {
-        width: 100%;
-        padding: 12px;
-        background: #000;
-        color: #fff;
-        font-size: 16px;
-        font-weight: bold;
-        border: none;
-        border-radius: 6px;
-        cursor: pointer;
-        transition: 0.3s;
-        margin-top: 15px;
-    }
-
-    .btn-submit:hover {
-        background: #333;
-    }
-
-    input[type="file"] {
-        margin-top: 10px;
-    }
-
-    /* Image Preview */
-    .preview-container {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 10px;
-        margin-top: 10px;
-    }
-
-    .preview-container img {
-        width: 80px;
-        height: 80px;
-        object-fit: cover;
-        border: 1px solid #ccc;
-        border-radius: 6px;
-    }
-
-    .existing-images img {
-        border: 2px solid #007bff;
-    }
-
-    .delete-image {
-        display: block;
-        color: #dc3545;
-        font-size: 13px;
-        cursor: pointer;
-        margin-top: 5px;
-        text-align: center;
-    }
-
-    .delete-image:hover {
-        text-decoration: underline;
-    }
-
-    /* Responsive */
-    @media (max-width: 600px) {
-        .form-container {
-            padding: 20px;
-        }
-        h2 {
-            font-size: 22px;
-        }
-    }
+    body {font-family:'Segoe UI',Tahoma,sans-serif;background:#f4f8fb;padding:30px;margin:0}
+    .form-container {background:#fff;max-width:900px;margin:auto;padding:30px 35px;border-radius:12px;box-shadow:0 5px 15px rgba(0,0,0,0.1)}
+    h2{text-align:center;margin-bottom:20px;font-size:28px;color:#222}
+    .form-group{margin-bottom:16px}
+    .form-group label{display:block;font-weight:bold;margin-bottom:8px;color:#333}
+    .form-group input,.form-group select,.form-group textarea{width:100%;padding:12px 14px;font-size:15px;border:1px solid #ccc;border-radius:8px;background:#fafafa}
+    .form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:#007bff;background:#fff;box-shadow:0 0 6px rgba(0,123,255,0.3)}
+    .form-group textarea{min-height:90px;resize:vertical}
+    #complaintsSection,#detailsSection{margin-top:20px;padding:18px;border:1px solid #ddd;border-radius:10px;background:#f9f9f9}
+    .complaint-block{padding:18px;margin-bottom:14px;background:#fff;border:1px solid #ccc;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.05)}
+    .btn-add{padding:10px 16px;background:#007bff;color:#fff;font-weight:bold;border:none;border-radius:8px;cursor:pointer;margin-top:10px}
+    .btn-remove{background:#dc3545;color:#fff;border:none;padding:6px 10px;border-radius:6px;margin-top:8px;font-size:14px;cursor:pointer}
+    .btn-submit{width:100%;padding:14px;background:#000;color:#fff;font-size:18px;border:none;border-radius:8px;cursor:pointer;margin-top:20px}
+    .preview-container{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
+    .image-item,.existing-img{position:relative;display:inline-block}
+    .preview-container img{width:90px;height:90px;object-fit:cover;border:1px solid #ccc;border-radius:8px;box-shadow:0 2px 5px rgba(0,0,0,0.1)}
+    .remove-image,.remove-old{position:absolute;top:-5px;right:-5px;background:#dc3545;color:white;border:none;border-radius:50%;width:20px;height:20px;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+    @media(max-width:768px){.form-container{padding:20px}h2{font-size:24px}.btn-submit{font-size:16px}}
 </style>
 </head>
 <body>
@@ -166,74 +30,94 @@
     <h2>Edit Job Card</h2>
     <form action="{% url 'jobcard_edit' job.id %}" method="POST" enctype="multipart/form-data">
         {% csrf_token %}
+
+        <!-- Customer Info -->
         <div class="form-group">
-            <label>Customer Name</label>
+            <label>Customer Name *</label>
             <input type="text" name="customer" value="{{ job.customer }}" required>
         </div>
         <div class="form-group">
-            <label>Address</label>
-            <input type="text" name="address" value="{{ job.address }}" required>
+            <label>Address *</label>
+            <textarea name="address" required>{{ job.address }}</textarea>
         </div>
         <div class="form-group">
-            <label>Phone</label>
+            <label>Phone *</label>
             <input type="number" name="phone" value="{{ job.phone }}" required>
         </div>
-        <div class="form-group">
-            <label>Item</label>
-            <select name="item" required>
-                <option value="">Select Item</option>
-                <option value="Mouse" {% if job.item == 'Mouse' %}selected{% endif %}>Mouse</option>
-                <option value="Keyboard" {% if job.item == 'Keyboard' %}selected{% endif %}>Keyboard</option>
-                <option value="CPU" {% if job.item == 'CPU' %}selected{% endif %}>CPU</option>
-                <option value="Laptop" {% if job.item == 'Laptop' %}selected{% endif %}>Laptop</option>
-            </select>
-        </div>
 
+        <!-- Item Selection -->
+        <div class="form-group">
+    <label>Item *</label>
+    <select name="item" required>
+        <option value="">Select Item</option>
+        {% for item in items %}
+            <option value="{{ item }}" {% if job.item == item %}selected{% endif %}>{{ item }}</option>
+        {% endfor %}
+    </select>
+</div>
+
+
+        <!-- Complaints -->
         <div id="complaintsSection">
             <h3>Complaints & Images</h3>
             <div id="complaintsContainer">
-                {% for c in job.complaints.all %}
+                {% for complaint in job.complaints.all %}
                 <div class="complaint-block" id="block-{{ forloop.counter0 }}">
+                    <input type="hidden" name="complaint_ids[]" value="{{ complaint.id }}">
                     <h4>Complaint {{ forloop.counter }}</h4>
-                    <input type="text" name="complaints[]" value="{{ c.description }}">
-                    <div class="existing-images">
-                        {% for img in c.images.all %}
-                        <div>
-                            <img src="{{ img.image.url }}" alt="Existing Image">
-                            <label>
-                                <input type="checkbox" name="delete_images" value="{{ img.id }}"> Delete
-                            </label>
-                        </div>
-                        {% endfor %}
+                    <div class="form-group">
+                        <label>Complaint Description</label>
+                        <input type="text" name="complaints[]" value="{{ complaint.description }}" required>
                     </div>
-                    <input type="file" name="images[]" multiple onchange="previewImages(event, {{ forloop.counter0 }})">
-                    <div class="preview-container" id="preview-{{ forloop.counter0 }}"></div>
+                    <div class="form-group">
+                        <label>Images</label>
+                        <div class="preview-container" id="preview-{{ forloop.counter0 }}">
+                            {% for img in complaint.images.all %}
+                            <div class="existing-img" id="old-img-{{ img.id }}">
+                                <img src="{{ img.image.url }}" alt="">
+                                <button type="button" class="remove-old" onclick="removeOldImage({{ img.id }})">×</button>
+                                <input type="hidden" name="keep_images" value="{{ img.id }}" id="keep-{{ img.id }}">
+                            </div>
+                            {% endfor %}
+                        </div>
+                        <input type="file" name="images-{{ forloop.counter0 }}" multiple accept="image/*" onchange="previewImages(event, {{ forloop.counter0 }})">
+                    </div>
+                    <div class="form-group">
+                        <label>Notes</label>
+                        <input type="text" name="notes[]" value="{{ complaint.notes }}">
+                    </div>
                 </div>
                 {% endfor %}
             </div>
-            <button type="button" class="btn-add" onclick="addComplaint()">+ Add Complaint</button>
+            <button type="button" class="btn-add" onclick="addComplaint()">+ Add Another Complaint</button>
         </div>
 
+        <!-- Item Details -->
         <div id="detailsSection">
             <h3>Item Details</h3>
             <div class="form-group">
-                <input type="text" name="serial" placeholder="Serial Number" value="{{ job.serial }}">
+                <label>Serial Number</label>
+                <input type="text" name="serial" value="{{ job.serial }}" maxlength="20" oninput="formatSerial(this)">
             </div>
             <div class="form-group">
-                <input type="text" name="config" placeholder="Configuration" value="{{ job.config }}">
+                <label>Configuration</label>
+                <input type="text" name="config" value="{{ job.config }}">
             </div>
         </div>
 
+        <!-- General Notes -->
         <div class="form-group">
-            <label>Notes</label>
-            <textarea name="notes">{{ job.notes }}</textarea>
+            <label>General Notes</label>
+            <textarea name="general_notes">{{ job.notes }}</textarea>
         </div>
-        <button class="btn-submit">Update</button>
+
+        <button class="btn-submit" type="submit">Update Job Card</button>
     </form>
 </div>
 
 <script>
 let count = {{ job.complaints.count }};
+let imageArrays = {};
 
 function addComplaint() {
     let container = document.getElementById('complaintsContainer');
@@ -242,23 +126,79 @@ function addComplaint() {
     div.id = `block-${count}`;
     div.innerHTML = `
         <h4>Complaint ${count + 1}</h4>
-        <input type="text" name="complaints[]" placeholder="Enter complaint">
-        <input type="file" name="images[]" multiple onchange="previewImages(event, ${count})">
-        <div class="preview-container" id="preview-${count}"></div>
+        <input type="hidden" name="complaint_ids[]" value="">
+        <div class="form-group">
+            <label>Complaint Description</label>
+            <input type="text" name="complaints[]" required>
+        </div>
+        <div class="form-group">
+            <label>Images</label>
+            <div class="preview-container" id="preview-${count}"></div>
+            <input type="file" name="images-${count}" multiple accept="image/*" onchange="previewImages(event, ${count})">
+        </div>
+        <div class="form-group">
+            <label>Notes</label>
+            <input type="text" name="notes[]">
+        </div>
+        <button type="button" class="btn-remove" onclick="removeComplaint(${count})">Remove Complaint</button>
     `;
     container.appendChild(div);
+    imageArrays[count] = [];
     count++;
+}
+
+function removeComplaint(index) {
+    document.getElementById(`block-${index}`).remove();
+    delete imageArrays[index];
 }
 
 function previewImages(event, index) {
     const files = event.target.files;
+    if (!imageArrays[index]) imageArrays[index] = [];
+    for (let i = 0; i < files.length; i++) imageArrays[index].push(files[i]);
+    rebuildPreview(index);
+}
+
+function rebuildPreview(index) {
     const previewContainer = document.getElementById('preview-' + index);
-    for (let i = 0; i < files.length; i++) {
+    previewContainer.querySelectorAll('.image-item').forEach(el => el.remove());
+    imageArrays[index].forEach((file, fileIndex) => {
+        const imageItem = document.createElement('div');
+        imageItem.className = 'image-item';
         const img = document.createElement('img');
-        img.src = URL.createObjectURL(files[i]);
+        img.src = URL.createObjectURL(file);
         img.onload = () => URL.revokeObjectURL(img.src);
-        previewContainer.appendChild(img);
-    }
+        const removeBtn = document.createElement('button');
+        removeBtn.className = 'remove-image';
+        removeBtn.innerHTML = '×';
+        removeBtn.onclick = () => removeImage(index, fileIndex);
+        imageItem.appendChild(img);
+        imageItem.appendChild(removeBtn);
+        previewContainer.appendChild(imageItem);
+    });
+    updateFileInput(index);
+}
+
+function removeImage(complaintIndex, imageIndex) {
+    imageArrays[complaintIndex].splice(imageIndex, 1);
+    rebuildPreview(complaintIndex);
+}
+
+function updateFileInput(index) {
+    const fileInput = document.querySelector(`input[name="images-${index}"]`);
+    const dt = new DataTransfer();
+    imageArrays[index].forEach(file => dt.items.add(file));
+    fileInput.files = dt.files;
+}
+
+function removeOldImage(imgId) {
+    document.getElementById('old-img-' + imgId).remove();
+    const keepInput = document.getElementById('keep-' + imgId);
+    keepInput.name = 'remove_images';
+}
+
+function formatSerial(input) {
+    input.value = input.value.replace(/[^A-Za-z]/g, '').toUpperCase();
 }
 </script>
 </body>

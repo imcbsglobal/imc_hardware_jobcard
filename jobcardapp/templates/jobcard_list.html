@@ -2,7 +2,6 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Job Card List</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <style>
@@ -12,24 +11,21 @@
         margin: 0;
         padding: 20px;
     }
-
     h2 {
         text-align: center;
         color: #333;
         margin-bottom: 25px;
         font-size: 28px;
     }
-
     .table-container {
         max-width: 1400px;
         margin: auto;
         background: #fff;
         padding: 20px;
         border-radius: 10px;
-        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 6px 16px rgba(0,0,0,.1);
         overflow-x: auto;
     }
-
     .btn-add {
         display: inline-block;
         padding: 12px 18px;
@@ -40,7 +36,7 @@
         font-weight: bold;
         border-radius: 6px;
         margin-bottom: 20px;
-        transition: 0.3s;
+        transition: .3s;
     }
     .btn-add:hover { background: #218838; }
 
@@ -49,100 +45,130 @@
         border-collapse: collapse;
         font-size: 15px;
     }
-
     thead {
         background: #007bff;
         color: #fff;
     }
-
     th, td {
         padding: 12px 15px;
         text-align: left;
         border-bottom: 1px solid #ddd;
-        vertical-align: middle;
+        vertical-align: top;
     }
+    tr:hover { background: #a6cdf6; }
 
-    tr:hover { background: #f1f1f1; }
-
-    .icon-actions {
+    .complaint-box {
         display: flex;
-        gap: 8px;
         align-items: center;
+        gap: 10px;
+        margin-bottom: 8px;
+    }
+    .complaint-text {
+        font-weight: bold;
+        color: #333;
+        min-width: 120px;
     }
 
     .icon-btn {
         font-size: 18px;
-        color: #007bff;
         cursor: pointer;
-        transition: 0.3s;
+        transition: .3s;
     }
-    .icon-btn:hover {
-        color: #0056b3;
-    }
-
-    /* Hidden details (notes and images) */
-    .hidden-section {
-        display: none;
-        margin-top: 8px;
-    }
-
-    .notes-text {
-        background: #f8f9fa;
-        padding: 6px 10px;
-        border-radius: 4px;
-        font-size: 13px;
-        color: #555;
-        border-left: 3px solid #007bff;
-    }
-
-    .images-list {
-        display: flex;
-        gap: 6px;
-        flex-wrap: wrap;
-        margin-top: 6px;
-    }
-
-    .images-list img {
-        width: 60px;
-        height: 60px;
-        object-fit: cover;
-        border-radius: 6px;
-        border: 1px solid #ccc;
-        cursor: pointer;
-        transition: transform 0.2s;
-    }
-
-    .images-list img:hover {
-        transform: scale(1.5);
-        z-index: 100;
-        position: relative;
-    }
-
-    .no-data {
-        color: #999;
-        font-style: italic;
-    }
+    .icon-note { color: #ff9800; }
+    .icon-note:hover { color: #e68900; }
+    .icon-image { color: #007bff; }
+    .icon-image:hover { color: #0056b3; }
 
     .btn-edit, .btn-delete {
-        display: inline-block;
-        padding: 6px 10px;
+        background: #007bff;
         color: #fff;
-        text-decoration: none;
-        font-size: 12px;
+        padding: 5px 5px;
         border-radius: 4px;
         margin-right: 5px;
-        transition: 0.3s;
+        font-size: 12px;
+        text-decoration: none;
     }
-
-    .btn-edit { background: #007bff; }
     .btn-edit:hover { background: #0056b3; }
-
     .btn-delete { background: #dc3545; }
     .btn-delete:hover { background: #c82333; }
 
-    @media(max-width: 992px) {
-        th, td { font-size: 14px; }
+    td.address-cell {
+        white-space: pre-wrap;
+        word-wrap: break-word;
+        max-width: 200px;
     }
+
+    .modal {
+        display: none;
+        position: fixed;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        background: rgba(0,0,0,.6);
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+    }
+    .modal-content {
+        background: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        text-align: center;
+        position: relative;
+        max-width: 400px;
+        width: 90%;
+    }
+    .modal img {
+        max-width: 100%;
+        max-height: 70vh;
+        border-radius: 6px;
+    }
+    .close-btn {
+        position: absolute;
+        top: 8px;
+        right: 15px;
+        font-size: 28px;
+        color: #333;
+        cursor: pointer;
+    }
+    .gallery-nav {
+        margin-top: 10px;
+        display: flex;
+        justify-content: space-between;
+    }
+    .gallery-nav button {
+        background: #007bff;
+        color: #fff;
+        border: none;
+        padding: 8px 14px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 14px;
+    }
+    .gallery-nav button:hover {
+        background: #0056b3;
+    }
+
+    #noteModal .modal-content p {
+        white-space: pre-wrap;
+        font-size: 16px;
+        color: #333;
+    }
+    .delete-actions {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+    }
+    .delete-actions button {
+        padding: 10px 18px;
+        font-size: 14px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    .btn-confirm { background: #dc3545; color: #fff; }
+    .btn-confirm:hover { background: #c82333; }
+    .btn-cancel { background: #6c757d; color: #fff; }
+    .btn-cancel:hover { background: #5a6268; }
 </style>
 </head>
 <body>
@@ -152,70 +178,62 @@
 <div class="table-container">
     <a href="{% url 'jobcard_create' %}" class="btn-add"><i class="fas fa-plus"></i> Add New Job Card</a>
 
-    <table>
+    <table id="jobTable">
         <thead>
             <tr>
-                <th>ID</th>
-                <th>Customer</th>
+                <th>Sl No</th>
+                <th>Customer Name</th>
                 <th>Address</th>
-                <th>Phone</th>
-                <th>Item</th>
-                <th>Complaints</th>
-                <th>Serial</th>
-                <th>Config</th>
-                <th>General Notes</th>
-                <th>Created</th>
+                <th>Phone No</th>
+                <th>Item Name</th>
+                <th>Complaints & Images</th>
+                <th>Serial No</th>
+                <th>Configuration</th>
+                <th>Notes</th>
+                <th>Created Date</th>
                 <th>Actions</th>
             </tr>
         </thead>
         <tbody>
         {% for job in jobcards %}
             <tr>
-                <td>{{ job.id }}</td>
+                <td>{{ forloop.counter }}</td>
                 <td>{{ job.customer }}</td>
-                <td>{{ job.address }}</td>
+                <td class="address-cell">{{ job.address }}</td>
                 <td>{{ job.phone }}</td>
                 <td>{{ job.item }}</td>
                 <td>
-                    {% if job.complaints.all %}
-                        {% for complaint in job.complaints.all %}
-                            <div>
-                                <strong>{{ complaint.description }}</strong>
-                                <div class="icon-actions">
-                                    {% if complaint.notes %}
-                                        <i class="fas fa-sticky-note icon-btn" title="View Note" onclick="toggleSection('note-{{ complaint.id }}')"></i>
-                                    {% endif %}
-                                    {% if complaint.images.all %}
-                                        <i class="fas fa-image icon-btn" title="View Images" onclick="toggleSection('img-{{ complaint.id }}')"></i>
-                                    {% endif %}
-                                </div>
-
-                                <!-- Notes Section -->
-                                <div class="hidden-section" id="note-{{ complaint.id }}">
-                                    <div class="notes-text">{{ complaint.notes }}</div>
-                                </div>
-
-                                <!-- Images Section -->
-                                <div class="hidden-section" id="img-{{ complaint.id }}">
-                                    <div class="images-list">
-                                        {% for img in complaint.images.all %}
-                                            <img src="{{ img.image.url }}" alt="Complaint Image">
-                                        {% endfor %}
-                                    </div>
-                                </div>
-                            </div>
-                        {% endfor %}
-                    {% else %}
-                        <span class="no-data">No Complaints</span>
-                    {% endif %}
+                    {% for complaint in job.complaints.all %}
+                        <div class="complaint-box">
+                            <span class="complaint-text">{{ complaint.description }}</span>
+                            {% if complaint.images.all %}
+                                <i class="fas fa-images icon-btn icon-image"
+                                   title="View Images"
+                                   onclick="showImages([{% for img in complaint.images.all %}'{{ img.image.url }}'{% if not forloop.last %}, {% endif %}{% endfor %}])"></i>
+                            {% endif %}
+                            {% if complaint.notes %}
+                                <i class="fas fa-file-alt icon-btn icon-note"
+                                   title="View Complaint Note"
+                                   onclick="showNotePopup('{{ complaint.notes|escapejs }}')"></i>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
                 </td>
                 <td>{{ job.serial|default:"N/A" }}</td>
                 <td>{{ job.config|default:"N/A" }}</td>
-                <td>{{ job.notes|default:"N/A" }}</td>
+                <td>
+                    {% if job.notes %}
+                        <i class="fas fa-file-contract icon-btn icon-note"
+                           title="View General Note"
+                           onclick="showNotePopup('{{ job.notes|escapejs }}')"></i>
+                    {% else %}
+                        N/A
+                    {% endif %}
+                </td>
                 <td>{{ job.created_at|date:"M d, Y H:i" }}</td>
                 <td>
                     <a href="{% url 'jobcard_edit' job.pk %}" class="btn-edit"><i class="fas fa-edit"></i></a>
-                    <a href="{% url 'jobcard_delete' job.pk %}" class="btn-delete"><i class="fas fa-trash"></i></a>
+                    <a href="javascript:void(0)" class="btn-delete" onclick="confirmDelete(this)"><i class="fas fa-trash"></i></a>
                 </td>
             </tr>
         {% empty %}
@@ -227,10 +245,111 @@
     </table>
 </div>
 
+<!-- IMAGE MODAL -->
+<div class="modal" id="imageModal">
+    <div class="modal-content">
+        <span class="close-btn" onclick="closeImageModal()">&times;</span>
+        <img id="currentImage" src="" alt="Image">
+        <div class="gallery-nav">
+            <button onclick="prevImage()">Prev</button>
+            <button onclick="nextImage()">Next</button>
+        </div>
+    </div>
+</div>
+
+<!-- NOTE MODAL -->
+<div class="modal" id="noteModal">
+    <div class="modal-content">
+        <span class="close-btn" onclick="closeNotePopup()">&times;</span>
+        <p id="noteText"></p>
+    </div>
+</div>
+
+<!-- DELETE CONFIRM MODAL -->
+<div class="modal" id="deleteModal">
+    <div class="modal-content">
+        <span class="close-btn" onclick="closeDeleteModal()">&times;</span>
+        <h3>Are you sure you want to delete this job card?</h3>
+        <div class="delete-actions">
+            <button class="btn-confirm" onclick="deleteRow()">Yes, Delete</button>
+            <button class="btn-cancel" onclick="closeDeleteModal()">Cancel</button>
+        </div>
+    </div>
+</div>
+
 <script>
-function toggleSection(id) {
-    const section = document.getElementById(id);
-    section.style.display = (section.style.display === 'block') ? 'none' : 'block';
+let imageList = [];
+let currentIndex = 0;
+let rowToDelete = null;
+
+function showImages(images) {
+    imageList = images;
+    currentIndex = 0;
+    document.getElementById('currentImage').src = imageList[currentIndex];
+    document.getElementById('imageModal').style.display = 'flex';
+}
+
+function closeImageModal() {
+    document.getElementById('imageModal').style.display = 'none';
+}
+
+function prevImage() {
+    if (currentIndex > 0) {
+        currentIndex--;
+        document.getElementById('currentImage').src = imageList[currentIndex];
+    }
+}
+
+function nextImage() {
+    if (currentIndex < imageList.length - 1) {
+        currentIndex++;
+        document.getElementById('currentImage').src = imageList[currentIndex];
+    }
+}
+
+function showNotePopup(text) {
+    document.getElementById('noteText').innerText = text;
+    document.getElementById('noteModal').style.display = 'flex';
+}
+
+function closeNotePopup() {
+    document.getElementById('noteModal').style.display = 'none';
+}
+
+/* Delete Confirmation */
+function confirmDelete(element) {
+    rowToDelete = element.closest('tr');
+    document.getElementById('deleteModal').style.display = 'flex';
+}
+
+function deleteRow() {
+    if (rowToDelete) {
+        rowToDelete.remove();
+        updateSerialNumbers(); // Auto-update Sl No after deletion
+    }
+    closeDeleteModal();
+}
+
+function closeDeleteModal() {
+    document.getElementById('deleteModal').style.display = 'none';
+}
+
+function updateSerialNumbers() {
+    const rows = document.querySelectorAll('#jobTable tbody tr');
+    let counter = 1;
+    rows.forEach(row => {
+        const firstCell = row.querySelector('td:first-child');
+        if (firstCell) {
+            firstCell.textContent = counter++;
+        }
+    });
+}
+
+/* Close modals on outside click */
+window.onclick = function(e) {
+    if (e.target === document.getElementById('imageModal')) closeImageModal();
+    if (e.target === document.getElementById('noteModal')) closeNotePopup();
+    if (e.target === document.getElementById('deleteModal')) closeDeleteModal();
 }
 </script>
 

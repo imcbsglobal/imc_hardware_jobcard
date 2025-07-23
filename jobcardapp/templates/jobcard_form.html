@@ -49,7 +49,6 @@
         border-radius: 8px;
         outline: none;
         transition: 0.3s;
-        box-sizing: border-box;
         background: #fafafa;
     }
 
@@ -100,22 +99,17 @@
     }
 
     .btn-add {
-        display: inline-block;
         padding: 10px 16px;
         background: #28a745;
         color: #fff;
-        font-size: 15px;
         font-weight: bold;
         border: none;
         border-radius: 8px;
         cursor: pointer;
-        margin-top: 12px;
-        transition: 0.3s;
+        margin-top: 10px;
+        display: inline-block;
     }
-
-    .btn-add:hover {
-        background: #218838;
-    }
+    .btn-add:hover { background: #218838; }
 
     .btn-remove {
         background: #dc3545;
@@ -123,14 +117,11 @@
         border: none;
         padding: 6px 10px;
         border-radius: 6px;
-        cursor: pointer;
         margin-top: 8px;
         font-size: 14px;
+        cursor: pointer;
     }
-
-    .btn-remove:hover {
-        background: #c82333;
-    }
+    .btn-remove:hover { background: #c82333; }
 
     .btn-submit {
         width: 100%;
@@ -138,42 +129,13 @@
         background: #000;
         color: #fff;
         font-size: 18px;
-        font-weight: bold;
         border: none;
         border-radius: 8px;
         cursor: pointer;
-        transition: 0.3s;
         margin-top: 20px;
     }
+    .btn-submit:hover { background: #333; }
 
-    .btn-submit:hover {
-        background: #333;
-    }
-
-    .btn-back {
-        display: inline-block;
-        padding: 10px 16px;
-        background: #6c757d;
-        color: #fff;
-        font-size: 15px;
-        font-weight: bold;
-        text-decoration: none;
-        border-radius: 8px;
-        margin-bottom: 20px;
-        transition: 0.3s;
-    }
-
-    .btn-back:hover {
-        background: #545b62;
-        color: #fff;
-        text-decoration: none;
-    }
-
-    input[type="file"] {
-        margin-top: 10px;
-    }
-
-    /* Image Preview */
     .preview-container {
         display: flex;
         flex-wrap: wrap;
@@ -190,43 +152,56 @@
         box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     }
 
-    /* Responsive */
+    .image-item {
+        position: relative;
+        display: inline-block;
+    }
+
+    .remove-image {
+        position: absolute;
+        top: -5px;
+        right: -5px;
+        background: #dc3545;
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 20px;
+        height: 20px;
+        font-size: 12px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
     @media (max-width: 768px) {
-        .form-container {
-            padding: 20px;
-        }
-        h2 {
-            font-size: 24px;
-        }
-        .btn-submit {
-            font-size: 16px;
-        }
+        .form-container { padding: 20px; }
+        h2 { font-size: 24px; }
+        .btn-submit { font-size: 16px; }
     }
 </style>
 </head>
 <body>
 <div class="form-container">
-    <a href="{% url 'jobcard_list' %}" class="btn-back">← Back to List</a>
-    
     <h2>Create Job Card</h2>
     <form action="{% url 'jobcard_create' %}" method="POST" enctype="multipart/form-data">
         {% csrf_token %}
         
+        <!-- Customer Info -->
         <div class="form-group">
             <label>Customer Name *</label>
-            <input type="text" name="customer" required placeholder="Enter customer name">
+            <input type="text" name="customer" required>
         </div>
-
         <div class="form-group">
             <label>Address *</label>
-            <textarea name="address" required placeholder="Enter full address"></textarea>
+            <textarea name="address" required></textarea>
         </div>
-
         <div class="form-group">
             <label>Phone *</label>
-            <input type="text" name="phone" required placeholder="Enter phone number">
+            <input type="number" name="phone" required>
         </div>
-
+        
+        <!-- Item Selection -->
         <div class="form-group">
             <label>Item *</label>
             <select name="item" onchange="showSections()" required>
@@ -238,10 +213,10 @@
                 <option value="Desktop">Desktop</option>
                 <option value="Printer">Printer</option>
                 <option value="Monitor">Monitor</option>
-                <option value="Other">Other</option>
             </select>
         </div>
-
+        
+        <!-- Complaints Section -->
         <div id="complaintsSection">
             <h3>Complaints & Images</h3>
             <div id="complaintsContainer">
@@ -249,45 +224,49 @@
                     <h4>Complaint 1</h4>
                     <div class="form-group">
                         <label>Complaint Description</label>
-                        <input type="text" name="complaints[]" placeholder="Enter complaint" required>
+                        <input type="text" name="complaints[]" required>
                     </div>
                     <div class="form-group">
-                        <label>Images (optional)</label>
-                        <input type="file" name="images[0][]" multiple accept="image/*" onchange="previewImages(event, 0)">
+                        <label>Images (you can select multiple)</label>
+                        <input type="file" name="images-0" multiple accept="image/*" onchange="previewImages(event, 0)">
                         <div class="preview-container" id="preview-0"></div>
                     </div>
                     <div class="form-group">
-                        <label>Notes (optional)</label>
-                        <input type="text" name="notes[]" placeholder="Enter additional notes">
+                        <label>Notes</label>
+                        <input type="text" name="notes[]">
                     </div>
                 </div>
             </div>
             <button type="button" class="btn-add" onclick="addComplaint()">+ Add Another Complaint</button>
         </div>
-
+        
+        <!-- Item Details -->
         <div id="detailsSection">
             <h3>Item Details</h3>
             <div class="form-group">
                 <label>Serial Number</label>
-                <input type="text" name="serial" placeholder="Serial Number (optional)">
+                <input type="text" name="serial" placeholder="Serial Number" id="serial" maxlength="20" oninput="formatSerial(this)">
             </div>
             <div class="form-group">
                 <label>Configuration</label>
-                <input type="text" name="config" placeholder="Configuration details (optional)">
+                <input type="text" name="config" placeholder="Configuration">
             </div>
         </div>
-
+        
+        <!-- General Notes -->
         <div class="form-group">
             <label>General Notes</label>
-            <textarea name="general_notes" placeholder="Any additional notes about the job"></textarea>
+            <textarea name="general_notes"></textarea>
         </div>
-
+        
+        <!-- Submit -->
         <button class="btn-submit" type="submit">Create Job Card</button>
     </form>
 </div>
 
 <script>
 let count = 1;
+let imageArrays = {}; // Store images for each complaint block
 
 function showSections() {
     document.getElementById('complaintsSection').style.display = 'block';
@@ -303,55 +282,105 @@ function addComplaint() {
         <h4>Complaint ${count + 1}</h4>
         <div class="form-group">
             <label>Complaint Description</label>
-            <input type="text" name="complaints[]" placeholder="Enter complaint" required>
+            <input type="text" name="complaints[]" required>
         </div>
         <div class="form-group">
-            <label>Images (optional)</label>
-            <input type="file" name="images[${count}][]" multiple accept="image/*" onchange="previewImages(event, ${count})">
+            <label>Images (you can select multiple)</label>
+            <input type="file" name="images-${count}" multiple accept="image/*" onchange="previewImages(event, ${count})">
             <div class="preview-container" id="preview-${count}"></div>
         </div>
         <div class="form-group">
-            <label>Notes (optional)</label>
-            <input type="text" name="notes[]" placeholder="Enter additional notes">
+            <label>Notes</label>
+            <input type="text" name="notes[]">
         </div>
         <button type="button" class="btn-remove" onclick="removeComplaint(${count})">Remove Complaint</button>
     `;
     container.appendChild(div);
+    
+    // Initialize empty array for this complaint's images
+    imageArrays[count] = [];
     count++;
 }
 
 function removeComplaint(index) {
-    const block = document.getElementById(`block-${index}`);
-    if (block) {
-        block.remove();
-        // Update complaint numbers
-        updateComplaintNumbers();
-    }
-}
-
-function updateComplaintNumbers() {
-    const blocks = document.querySelectorAll('.complaint-block');
-    blocks.forEach((block, index) => {
-        const heading = block.querySelector('h4');
-        if (heading) {
-            heading.textContent = `Complaint ${index + 1}`;
-        }
-    });
+    document.getElementById(`block-${index}`).remove();
+    // Clean up the image array for this complaint
+    delete imageArrays[index];
 }
 
 function previewImages(event, index) {
     const files = event.target.files;
     const previewContainer = document.getElementById('preview-' + index);
     
-    // Clear existing previews for this complaint
-    previewContainer.innerHTML = '';
-    
-    for (let i = 0; i < files.length; i++) {
-        const img = document.createElement('img');
-        img.src = URL.createObjectURL(files[i]);
-        img.onload = () => URL.revokeObjectURL(img.src);
-        previewContainer.appendChild(img);
+    // Initialize array if it doesn't exist
+    if (!imageArrays[index]) {
+        imageArrays[index] = [];
     }
+    
+    // Add new files to the existing array
+    for (let i = 0; i < files.length; i++) {
+        imageArrays[index].push(files[i]);
+    }
+    
+    // Clear and rebuild the preview
+    rebuildPreview(index);
+}
+
+function rebuildPreview(index) {
+    const previewContainer = document.getElementById('preview-' + index);
+    previewContainer.innerHTML = ''; // Clear existing previews
+    
+    // Create preview for each image in the array
+    imageArrays[index].forEach((file, fileIndex) => {
+        const imageItem = document.createElement('div');
+        imageItem.className = 'image-item';
+        
+        const img = document.createElement('img');
+        img.src = URL.createObjectURL(file);
+        img.onload = () => URL.revokeObjectURL(img.src);
+        
+        const removeBtn = document.createElement('button');
+        removeBtn.className = 'remove-image';
+        removeBtn.innerHTML = '×';
+        removeBtn.type = 'button';
+        removeBtn.onclick = () => removeImage(index, fileIndex);
+        
+        imageItem.appendChild(img);
+        imageItem.appendChild(removeBtn);
+        previewContainer.appendChild(imageItem);
+    });
+    
+    // Update the file input with current files
+    updateFileInput(index);
+}
+
+function removeImage(complaintIndex, imageIndex) {
+    // Remove image from array
+    imageArrays[complaintIndex].splice(imageIndex, 1);
+    
+    // Rebuild preview
+    rebuildPreview(complaintIndex);
+}
+
+function updateFileInput(index) {
+    const fileInput = document.querySelector(`input[name="images-${index}"]`);
+    const dt = new DataTransfer();
+    
+    // Add all files from the array to DataTransfer
+    imageArrays[index].forEach(file => {
+        dt.items.add(file);
+    });
+    
+    // Update the input's files
+    fileInput.files = dt.files;
+}
+
+// Initialize image array for the first complaint block
+imageArrays[0] = [];
+
+// Force Serial Number to uppercase letters only
+function formatSerial(input) {
+    input.value = input.value.replace(/[^A-Za-z]/g, '').toUpperCase();
 }
 </script>
 </body>
