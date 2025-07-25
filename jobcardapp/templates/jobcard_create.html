@@ -67,7 +67,7 @@ h2{
 .form-group input,
 .form-group select,
 .form-group textarea{
-    width:100%;
+    width:100 px;
     padding:24px 14px 8px;
     font-size:14px;
     color:#fff;
@@ -93,7 +93,10 @@ h2{
     font-size:11px;
     color:var(--accent);
 }
-.form-group textarea{min-height:80px;resize:vertical;}
+.form-group textarea{
+    min-height:80px;
+    resize:vertical;
+}
 
 /* ----------  SECTIONS  ---------- */
 #complaintsSection,
@@ -120,6 +123,7 @@ h2{
     box-shadow:0 6px 18px rgba(0,0,0,.2);
 }
 .complaint-block h4{
+    width: 100%;
     margin:0 0 10px;
     font-size:15px;
     color:#fff;
@@ -155,19 +159,24 @@ h2{
     transition:transform .2s;
 }
 .btn-remove:hover{transform:scale(1.05);}
+
+/* ----------  SUBMIT BUTTON (SMALLER)  ---------- */
 .btn-submit{
-    width:100%;
-    margin-top:25px;
-    padding:14px;
-    font-size:17px;
+    display:inline-block;
+    width:auto;             /* Reduced from full width */
+    min-width:180px;        /* Set a min width for consistency */
+    margin:20px auto 0;
+    padding:10px 20px;      /* Reduced padding */
+    font-size:15px;         /* Slightly smaller font */
     font-weight:700;
-    letter-spacing:1px;
+    letter-spacing:.5px;
     color:#000;
     background:linear-gradient(90deg,var(--accent),var(--accent-dark));
     border:none;
     border-radius:var(--radius);
     cursor:pointer;
     transition:transform .25s,box-shadow .25s;
+    display:block;
 }
 .btn-submit:hover{
     transform:translateY(-2px);
@@ -286,8 +295,10 @@ h2{
         <!-- Item Details -->
         <div id="detailsSection" style="display:none;">
             <h3>Item Details</h3>
-            <input type="text" name="serial" placeholder="Serial Number" required>
-            <input type="text" name="config" placeholder="Configuration" required>
+             <label>Serial Number</label>
+            <input type="text" name="Serial Number" placeholder="Serial Number" required>
+             <label>Configuration</label>
+            <input type="text" name="Configuration" placeholder="Configuration" required>
         </div>
 
         <!-- General Notes -->
@@ -303,14 +314,10 @@ h2{
 <!-- ==========  JAVASCRIPT  ========== -->
 <script>
 let complaintCount = 1;
-
-/* Show sections when item selected */
 function showSections() {
     document.getElementById('complaintsSection').style.display = 'block';
     document.getElementById('detailsSection').style.display = 'block';
 }
-
-/* Add new complaint */
 function addComplaint() {
     const container = document.getElementById('complaintsContainer');
     const div = document.createElement('div');
@@ -339,13 +346,9 @@ function addComplaint() {
     container.appendChild(div);
     complaintCount++;
 }
-
-/* Remove complaint block */
 function removeComplaint(index) {
     document.getElementById(`block-${index}`).remove();
 }
-
-/* Add image input */
 function addImageInput(index) {
     const container = document.getElementById(`file-inputs-${index}`);
     const input = document.createElement('input');
@@ -355,20 +358,15 @@ function addImageInput(index) {
     input.onchange = (event) => handleImage(event, index, input);
     container.appendChild(input);
 }
-
-/* Handle image preview */
 function handleImage(event, index, inputElement) {
     const file = event.target.files[0];
     if (!file) return;
-
     const previewContainer = document.getElementById(`preview-${index}`);
     const box = document.createElement('div');
     box.classList.add('preview-box');
-
     const img = document.createElement('img');
     img.src = URL.createObjectURL(file);
     img.onload = () => URL.revokeObjectURL(img.src);
-
     const removeBtn = document.createElement('button');
     removeBtn.innerHTML = '×';
     removeBtn.classList.add('remove-image');
@@ -376,7 +374,6 @@ function handleImage(event, index, inputElement) {
         box.remove();
         inputElement.remove();
     };
-
     box.appendChild(img);
     box.appendChild(removeBtn);
     previewContainer.appendChild(box);

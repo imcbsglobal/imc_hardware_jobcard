@@ -17,6 +17,45 @@
         margin-bottom: 25px;
         font-size: 28px;
     }
+
+    /* ✅ Top Bar */
+    .top-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        max-width: 1400px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .search-box {
+        display: flex;
+        gap: 10px;
+    }
+
+    .search-box input {
+        padding: 10px;
+        font-size: 15px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        width: 250px;
+    }
+
+    .btn-add {
+        display: inline-block;
+        padding: 12px 18px;
+        background:black;
+        color: #fff;
+        text-decoration: none;
+        font-size: 16px;
+        font-weight: bold;
+        border-radius: 6px;
+        transition: .3s;
+    }
+    .btn-add:hover { background: #7e807f; }
+
+    /* ✅ Table Styles */
     .table-container {
         max-width: 1400px;
         margin: auto;
@@ -26,19 +65,6 @@
         box-shadow: 0 6px 16px rgba(0,0,0,.1);
         overflow-x: auto;
     }
-    .btn-add {
-        display: inline-block;
-        padding: 12px 18px;
-        background: #28a745;
-        color: #fff;
-        text-decoration: none;
-        font-size: 16px;
-        font-weight: bold;
-        border-radius: 6px;
-        margin-bottom: 20px;
-        transition: .3s;
-    }
-    .btn-add:hover { background: #218838; }
 
     table {
         width: 100%;
@@ -46,16 +72,17 @@
         font-size: 15px;
     }
     thead {
-        background: #007bff;
+        background:black;
         color: #fff;
     }
+
     th, td {
         padding: 12px 15px;
         text-align: left;
         border-bottom: 1px solid #ddd;
         vertical-align: top;
     }
-    tr:hover { background: #a6cdf6; }
+    tr:hover { background: #e2e2ec; }
 
     .complaint-box {
         display: flex;
@@ -74,13 +101,13 @@
         cursor: pointer;
         transition: .3s;
     }
-    .icon-note { color: #ff9800; }
-    .icon-note:hover { color: #e68900; }
-    .icon-image { color: #007bff; }
-    .icon-image:hover { color: #0056b3; }
+    .icon-note { color: rgb(8, 150, 206); }
+    .icon-note:hover { color:rgb(11, 137, 186); }
+    .icon-image { color:black }
+    .icon-image:hover { color: black; }
 
     .btn-edit, .btn-delete {
-        background: #007bff;
+        background: orange;
         color: #fff;
         padding: 5px 5px;
         border-radius: 4px;
@@ -88,7 +115,7 @@
         font-size: 12px;
         text-decoration: none;
     }
-    .btn-edit:hover { background: #0056b3; }
+    .btn-edit:hover { background: orange; }
     .btn-delete { background: #dc3545; }
     .btn-delete:hover { background: #c82333; }
 
@@ -98,6 +125,7 @@
         max-width: 200px;
     }
 
+    /* ✅ Modal */
     .modal {
         display: none;
         position: fixed;
@@ -169,15 +197,55 @@
     .btn-confirm:hover { background: #c82333; }
     .btn-cancel { background: #6c757d; color: #fff; }
     .btn-cancel:hover { background: #5a6268; }
+
+    /* Alert styles */
+    .alert {
+        padding: 15px;
+        margin: 20px auto;
+        max-width: 1400px;
+        border-radius: 5px;
+        position: relative;
+    }
+    .alert-success {
+        background-color: #d4edda;
+        border: 1px solid #c3e6cb;
+        color: #155724;
+    }
+    .alert-error {
+        background-color: #f8d7da;
+        border: 1px solid #f5c6cb;
+        color: #721c24;
+    }
+.complaint-note {
+    margin-left: 20px;
+    margin-bottom: 10px;
+    font-size: 14px;
+    color: #444;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    background: #f9f9f9;
+    padding: 6px 8px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+}
 </style>
 </head>
 <body>
 
 <h2>Job Card List</h2>
 
-<div class="table-container">
-    <a href="{% url 'jobcard_create' %}" class="btn-add"><i class="fas fa-plus"></i> Add New Job Card</a>
+<!-- Alert Container -->
+<div id="alertContainer"></div>
 
+<!-- ✅ Top Bar -->
+<div class="top-bar">
+    <div class="search-box">
+        <input type="text" id="searchInput" placeholder="Search by Customer Name or Item">
+    </div>
+    <a href="{% url 'jobcard_create' %}" class="btn-add"><i class="fas fa-plus"></i> Add New</a>
+</div>
+
+<div class="table-container">
     <table id="jobTable">
         <thead>
             <tr>
@@ -196,7 +264,7 @@
         </thead>
         <tbody>
         {% for job in jobcards %}
-            <tr>
+            <tr data-job-id="{{ job.pk }}">
                 <td>{{ forloop.counter }}</td>
                 <td>{{ job.customer }}</td>
                 <td class="address-cell">{{ job.address }}</td>
@@ -209,7 +277,7 @@
                             {% if complaint.images.all %}
                                 <i class="fas fa-images icon-btn icon-image"
                                    title="View Images"
-                                   onclick="showImages([{% for img in complaint.images.all %}'{{ img.image.url }}'{% if not forloop.last %}, {% endif %}{% endfor %}])"></i>
+                                   onclick="showImages([{% for img in complaint.images.all %}'{{ img.image.url }}?v={{ img.id }}'{% if not forloop.last %}, {% endif %}{% endfor %}])"></i>
                             {% endif %}
                             {% if complaint.notes %}
                                 <i class="fas fa-file-alt icon-btn icon-note"
@@ -227,13 +295,13 @@
                            title="View General Note"
                            onclick="showNotePopup('{{ job.notes|escapejs }}')"></i>
                     {% else %}
-                        N/A
+                        --
                     {% endif %}
                 </td>
-                <td>{{ job.created_at|date:"M d, Y H:i" }}</td>
+                <td>{{ job.created_at|date:"M d Y" }}</td>
                 <td>
                     <a href="{% url 'jobcard_edit' job.pk %}" class="btn-edit"><i class="fas fa-edit"></i></a>
-                    <a href="javascript:void(0)" class="btn-delete" onclick="confirmDelete(this)"><i class="fas fa-trash"></i></a>
+                    <a href="javascript:void(0)" class="btn-delete" onclick="confirmDelete(this)" data-job-id="{{ job.pk }}"><i class="fas fa-trash"></i></a>
                 </td>
             </tr>
         {% empty %}
@@ -259,9 +327,21 @@
 
 <!-- NOTE MODAL -->
 <div class="modal" id="noteModal">
-    <div class="modal-content">
+    <div class="modal-content" style="max-height: 80vh; overflow-y: auto;">
         <span class="close-btn" onclick="closeNotePopup()">&times;</span>
-        <p id="noteText"></p>
+        <h3 style="color:#333;">Complaint Note</h3>
+        <pre id="noteText" style="
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-size: 15px;
+            color: #333;
+            text-align: left;
+            line-height: 1.6;
+            background: #f7f7f7;
+            padding: 12px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+        "></pre>
     </div>
 </div>
 
@@ -271,7 +351,7 @@
         <span class="close-btn" onclick="closeDeleteModal()">&times;</span>
         <h3>Are you sure you want to delete this job card?</h3>
         <div class="delete-actions">
-            <button class="btn-confirm" onclick="deleteRow()">Yes, Delete</button>
+            <button class="btn-confirm" onclick="deleteJobCard()">Yes, Delete</button>
             <button class="btn-cancel" onclick="closeDeleteModal()">Cancel</button>
         </div>
     </div>
@@ -281,6 +361,35 @@
 let imageList = [];
 let currentIndex = 0;
 let rowToDelete = null;
+let jobIdToDelete = null;
+
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+function showAlert(message, type) {
+    const alertContainer = document.getElementById('alertContainer');
+    const alertDiv = document.createElement('div');
+    alertDiv.className = `alert alert-${type}`;
+    alertDiv.innerHTML = message;
+    alertContainer.appendChild(alertDiv);
+    setTimeout(() => {
+        if (alertDiv.parentNode) {
+            alertDiv.parentNode.removeChild(alertDiv);
+        }
+    }, 5000);
+}
 
 function showImages(images) {
     imageList = images;
@@ -316,22 +425,58 @@ function closeNotePopup() {
     document.getElementById('noteModal').style.display = 'none';
 }
 
-/* Delete Confirmation */
 function confirmDelete(element) {
     rowToDelete = element.closest('tr');
+    jobIdToDelete = element.getAttribute('data-job-id');
     document.getElementById('deleteModal').style.display = 'flex';
 }
 
-function deleteRow() {
-    if (rowToDelete) {
-        rowToDelete.remove();
-        updateSerialNumbers(); // Auto-update Sl No after deletion
+function deleteJobCard() {
+    if (!jobIdToDelete) {
+        showAlert('Error: No job card selected for deletion', 'error');
+        closeDeleteModal();
+        return;
     }
-    closeDeleteModal();
+
+    const deleteBtn = document.querySelector('.btn-confirm');
+    deleteBtn.disabled = true;
+    deleteBtn.textContent = 'Deleting...';
+
+    fetch(`/delete/${jobIdToDelete}/`, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': getCookie('csrftoken'),
+            'Content-Type': 'application/json',
+        },
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            if (rowToDelete) {
+                rowToDelete.remove();
+                updateSerialNumbers();
+            }
+            showAlert(data.message, 'success');
+            closeDeleteModal();
+        } else {
+            showAlert(data.error || 'Error deleting job card', 'error');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        showAlert('Network error occurred while deleting job card', 'error');
+    })
+    .finally(() => {
+        deleteBtn.disabled = false;
+        deleteBtn.textContent = 'Yes, Delete';
+        closeDeleteModal();
+    });
 }
 
 function closeDeleteModal() {
     document.getElementById('deleteModal').style.display = 'none';
+    rowToDelete = null;
+    jobIdToDelete = null;
 }
 
 function updateSerialNumbers() {
@@ -339,19 +484,36 @@ function updateSerialNumbers() {
     let counter = 1;
     rows.forEach(row => {
         const firstCell = row.querySelector('td:first-child');
-        if (firstCell) {
+        if (firstCell && !row.querySelector('td[colspan]')) {
             firstCell.textContent = counter++;
         }
     });
 }
 
-/* Close modals on outside click */
-window.onclick = function(e) {
-    if (e.target === document.getElementById('imageModal')) closeImageModal();
-    if (e.target === document.getElementById('noteModal')) closeNotePopup();
-    if (e.target === document.getElementById('deleteModal')) closeDeleteModal();
-}
-</script>
+document.getElementById('searchInput').addEventListener('keyup', function() {
+    const input = this.value.toLowerCase().trim();
+    const rows = document.querySelectorAll("#jobTable tbody tr");
+    rows.forEach(row => {
+        if (row.querySelector('td[colspan]')) return;
+        const customer = row.cells[1]?.innerText.toLowerCase().trim() || "";
+        const item = row.cells[4]?.innerText.toLowerCase().trim() || "";
+        if (customer.startsWith(input) || item.startsWith(input) || input === "") {
+            row.style.display = "";
+        } else {
+            row.style.display = "none";
+        }
+    });
+});
 
+window.addEventListener('click', function(event) {
+    const modals = ['imageModal', 'noteModal', 'deleteModal'];
+    modals.forEach(modalId => {
+        const modal = document.getElementById(modalId);
+        if (event.target === modal) {
+            modal.style.display = 'none';
+        }
+    });
+});
+</script>
 </body>
 </html>

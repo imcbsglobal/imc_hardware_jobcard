@@ -5,28 +5,213 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Edit Job Card</title>
 <style>
-    body {font-family:'Segoe UI',Tahoma,sans-serif;background:#f4f8fb;padding:30px;margin:0}
-    .form-container {background:#fff;max-width:900px;margin:auto;padding:30px 35px;border-radius:12px;box-shadow:0 5px 15px rgba(0,0,0,0.1)}
-    h2{text-align:center;margin-bottom:20px;font-size:28px;color:#222}
-    .form-group{margin-bottom:16px}
-    .form-group label{display:block;font-weight:bold;margin-bottom:8px;color:#333}
-    .form-group input,.form-group select,.form-group textarea{width:100%;padding:12px 14px;font-size:15px;border:1px solid #ccc;border-radius:8px;background:#fafafa}
-    .form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:#007bff;background:#fff;box-shadow:0 0 6px rgba(0,123,255,0.3)}
-    .form-group textarea{min-height:90px;resize:vertical}
-    #complaintsSection,#detailsSection{margin-top:20px;padding:18px;border:1px solid #ddd;border-radius:10px;background:#f9f9f9}
-    .complaint-block{padding:18px;margin-bottom:14px;background:#fff;border:1px solid #ccc;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.05)}
-    .btn-add{padding:10px 16px;background:#007bff;color:#fff;font-weight:bold;border:none;border-radius:8px;cursor:pointer;margin-top:10px}
-    .btn-remove{background:#dc3545;color:#fff;border:none;padding:6px 10px;border-radius:6px;margin-top:8px;font-size:14px;cursor:pointer}
-    .btn-submit{width:100%;padding:14px;background:#000;color:#fff;font-size:18px;border:none;border-radius:8px;cursor:pointer;margin-top:20px}
-    .preview-container{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
-    .image-item,.existing-img{position:relative;display:inline-block}
-    .preview-container img{width:90px;height:90px;object-fit:cover;border:1px solid #ccc;border-radius:8px;box-shadow:0 2px 5px rgba(0,0,0,0.1)}
-    .remove-image,.remove-old{position:absolute;top:-5px;right:-5px;background:#dc3545;color:white;border:none;border-radius:50%;width:20px;height:20px;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center}
-    @media(max-width:768px){.form-container{padding:20px}h2{font-size:24px}.btn-submit{font-size:16px}}
+    body {
+        font-family: 'Segoe UI', Tahoma, sans-serif;
+        background: #f4f8fb;
+        padding: 30px;
+        margin: 0;
+    }
+
+    .form-container {
+        background: #fff;
+        max-width: 900px;
+        margin: auto;
+        padding: 30px 35px;
+        border-radius: 12px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        position: relative;
+    }
+
+    h2 {
+        text-align: center;
+        margin-bottom: 20px;
+        font-size: 28px;
+        color: #222;
+    }
+
+    .form-group {
+        margin-bottom: 16px;
+    }
+
+    .form-group label {
+        display: block;
+        font-weight: bold;
+        margin-bottom: 8px;
+        color: #333;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        width: 100%;
+        padding: 12px 14px;
+        font-size: 15px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        background: #fafafa;
+        outline: none;
+        transition: 0.3s;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+        border-color: #007bff;
+        background: #fff;
+        box-shadow: 0 0 6px rgba(0,123,255,0.3);
+    }
+
+    .form-group textarea {
+        min-height: 90px;
+        resize: vertical;
+    }
+
+    #complaintsSection,
+    #detailsSection {
+        margin-top: 20px;
+        padding: 18px;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        background: #f9f9f9;
+    }
+
+    .complaint-block {
+        padding: 18px;
+        margin-bottom: 14px;
+        background: #fff;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        position: relative;
+    }
+
+    .btn-add {
+        padding: 10px 16px;
+        background: #007bff;
+        color: #fff;
+        font-weight: bold;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        margin-top: 10px;
+        display: inline-block;
+    }
+
+    .btn-add:hover { background: #0056b3; }
+
+    .btn-remove {
+        background: #dc3545;
+        color: #fff;
+        border: none;
+        padding: 6px 10px;
+        border-radius: 6px;
+        margin-top: 8px;
+        font-size: 14px;
+        cursor: pointer;
+    }
+
+    .btn-remove:hover { background: #c82333; }
+
+    .delete-complaint-btn {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: #ff2d55;
+        color: #fff;
+        border: none;
+        font-size: 14px;
+        padding: 6px 10px;
+        border-radius: 6px;
+        cursor: pointer;
+    }
+
+    .delete-complaint-btn:hover { background: #e60039; }
+
+    /* Submit Button */
+    .btn-submit {
+        display: block;
+        margin: 20px auto;
+        padding: 10px 24px;
+        background: #000;
+        color: #fff;
+        font-size: 16px;
+        font-weight: bold;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+    }
+
+    .btn-submit:hover { background: #333; }
+
+    /* Back Button */
+    .back-btn {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        margin-left: 150px;
+        padding: 8px 18px;
+        background: black;
+        color: #fff;
+        font-size: 14px;
+        font-weight: 500;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        text-decoration: none;
+    }
+
+    .back-btn:hover {
+        background: #5a6268;
+    }
+
+    .preview-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 10px;
+    }
+
+    .image-item, .existing-img {
+        position: relative;
+        display: inline-block;
+    }
+
+    .preview-container img {
+        width: 90px;
+        height: 90px;
+        object-fit: cover;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .remove-image, .remove-old {
+        position: absolute;
+        top: -5px;
+        right: -5px;
+        background: #dc3545;
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 20px;
+        height: 20px;
+        font-size: 12px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    @media (max-width: 768px) {
+        .form-container { padding: 20px; }
+        h2 { font-size: 24px; }
+        .btn-submit { font-size: 15px; }
+    }
 </style>
 </head>
 <body>
 <div class="form-container">
+    <a href="{% url 'jobcard_list' %}" class="back-btn">← Back</a>
     <h2>Edit Job Card</h2>
     <form action="{% url 'jobcard_edit' job.id %}" method="POST" enctype="multipart/form-data">
         {% csrf_token %}
@@ -47,15 +232,17 @@
 
         <!-- Item Selection -->
         <div class="form-group">
-    <label>Item *</label>
-    <select name="item" required>
-        <option value="">Select Item</option>
-        {% for item in items %}
-            <option value="{{ item }}" {% if job.item == item %}selected{% endif %}>{{ item }}</option>
-        {% endfor %}
-    </select>
-</div>
+            <label>Item *</label>
+            <select name="item" required>
+                <option value="">Select Item</option>
+                {% for item in items %}
+                    <option value="{{ item }}" {% if job.item == item %}selected{% endif %}>{{ item }}</option>
+                {% endfor %}
+            </select>
+        </div>
 
+        <!-- Hidden container for images to be removed -->
+        <div id="removeImagesContainer"></div>
 
         <!-- Complaints -->
         <div id="complaintsSection">
@@ -65,21 +252,22 @@
                 <div class="complaint-block" id="block-{{ forloop.counter0 }}">
                     <input type="hidden" name="complaint_ids[]" value="{{ complaint.id }}">
                     <h4>Complaint {{ forloop.counter }}</h4>
+                    <button type="button" class="delete-complaint-btn" onclick="deleteExistingComplaint({{ forloop.counter0 }}, {{ complaint.id }})">Delete</button>
                     <div class="form-group">
                         <label>Complaint Description</label>
                         <input type="text" name="complaints[]" value="{{ complaint.description }}" required>
                     </div>
                     <div class="form-group">
-                        <label>Images</label>
+                        <label>Existing Images</label>
                         <div class="preview-container" id="preview-{{ forloop.counter0 }}">
                             {% for img in complaint.images.all %}
                             <div class="existing-img" id="old-img-{{ img.id }}">
-                                <img src="{{ img.image.url }}" alt="">
+                                <img src="{{ img.image.url }}?v={{ img.id }}" alt="">
                                 <button type="button" class="remove-old" onclick="removeOldImage({{ img.id }})">×</button>
-                                <input type="hidden" name="keep_images" value="{{ img.id }}" id="keep-{{ img.id }}">
                             </div>
                             {% endfor %}
                         </div>
+                        <label>Add New Images</label>
                         <input type="file" name="images-{{ forloop.counter0 }}" multiple accept="image/*" onchange="previewImages(event, {{ forloop.counter0 }})">
                     </div>
                     <div class="form-group">
@@ -97,11 +285,11 @@
             <h3>Item Details</h3>
             <div class="form-group">
                 <label>Serial Number</label>
-                <input type="text" name="serial" value="{{ job.serial }}" maxlength="20" oninput="formatSerial(this)">
+                <input type="text" name="serial" value="{{ job.serial }}" maxlength="20" oninput="formatSerial(this)" required>
             </div>
             <div class="form-group">
                 <label>Configuration</label>
-                <input type="text" name="config" value="{{ job.config }}">
+                <input type="text" name="config" value="{{ job.config }}" required>
             </div>
         </div>
 
@@ -126,6 +314,7 @@ function addComplaint() {
     div.id = `block-${count}`;
     div.innerHTML = `
         <h4>Complaint ${count + 1}</h4>
+        <button type="button" class="delete-complaint-btn" onclick="removeComplaint(${count})">Delete</button>
         <input type="hidden" name="complaint_ids[]" value="">
         <div class="form-group">
             <label>Complaint Description</label>
@@ -140,7 +329,6 @@ function addComplaint() {
             <label>Notes</label>
             <input type="text" name="notes[]">
         </div>
-        <button type="button" class="btn-remove" onclick="removeComplaint(${count})">Remove Complaint</button>
     `;
     container.appendChild(div);
     imageArrays[count] = [];
@@ -150,6 +338,12 @@ function addComplaint() {
 function removeComplaint(index) {
     document.getElementById(`block-${index}`).remove();
     delete imageArrays[index];
+}
+
+function deleteExistingComplaint(index, complaintId) {
+    let block = document.getElementById(`block-${index}`);
+    block.innerHTML = `<input type="hidden" name="delete_complaints[]" value="${complaintId}">`;
+    block.style.display = 'none';
 }
 
 function previewImages(event, index) {
@@ -192,9 +386,16 @@ function updateFileInput(index) {
 }
 
 function removeOldImage(imgId) {
-    document.getElementById('old-img-' + imgId).remove();
-    const keepInput = document.getElementById('keep-' + imgId);
-    keepInput.name = 'remove_images';
+    // Hide the image immediately from UI
+    document.getElementById('old-img-' + imgId).style.display = 'none';
+    
+    // Add to removal list
+    const removeContainer = document.getElementById('removeImagesContainer');
+    const hiddenInput = document.createElement('input');
+    hiddenInput.type = 'hidden';
+    hiddenInput.name = 'remove_images';
+    hiddenInput.value = imgId;
+    removeContainer.appendChild(hiddenInput);
 }
 
 function formatSerial(input) {
