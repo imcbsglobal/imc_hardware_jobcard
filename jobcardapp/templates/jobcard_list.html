@@ -1,3 +1,5 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -24,7 +26,7 @@
         justify-content: space-between;
         align-items: center;
         margin-bottom: 20px;
-        max-width: 1400px;
+        max-width: 1600px;
         margin-left: auto;
         margin-right: auto;
     }
@@ -45,7 +47,7 @@
     .btn-add {
         display: inline-block;
         padding: 12px 18px;
-        background:black;
+        background: black;
         color: #fff;
         text-decoration: none;
         font-size: 16px;
@@ -57,7 +59,8 @@
 
     /* ✅ Table Styles */
     .table-container {
-        max-width: 1400px;
+        font-size: 20px;
+        max-width: 1600px;
         margin: auto;
         background: #fff;
         padding: 20px;
@@ -69,35 +72,53 @@
     table {
         width: 100%;
         border-collapse: collapse;
-        font-size: 15px;
+        font-size: 14px;
+        min-width: 1400px;
     }
     thead {
-        background:black;
+        background: black;
         color: #fff;
     }
 
     th, td {
-        padding: 12px 15px;
+        font-size: 18px;
+        padding: 10px 12px;
         text-align: left;
         border-bottom: 1px solid #ddd;
         vertical-align: top;
     }
     tr:hover { background: #e2e2ec; }
 
+    .item-row {
+        margin-bottom: 8px;
+        padding: 8px;
+        border: 1px solid #e0e0e0;
+        border-radius: 4px;
+        background: #f9f9f9;
+    }
+
+    .item-header {
+        font-weight: bold;
+        color: #007bff;
+        margin-bottom: 3px;
+        font-size: 14px;
+    }
+
     .complaint-box {
         display: flex;
         align-items: center;
-        gap: 10px;
-        margin-bottom: 8px;
+        gap: 8px;
+        margin-bottom: 6px;
+        margin-left: 10px;
     }
     .complaint-text {
         font-weight: bold;
         color: #333;
-        min-width: 120px;
+        font-size: 18px;
     }
 
     .icon-btn {
-        font-size: 18px;
+        font-size: 16px;
         cursor: pointer;
         transition: .3s;
     }
@@ -109,20 +130,27 @@
     .btn-edit, .btn-delete {
         background: orange;
         color: #fff;
-        padding: 5px 5px;
-        border-radius: 4px;
-        margin-right: 5px;
-        font-size: 12px;
+        padding: 4px 6px;
+        border-radius: 3px;
+        margin-right: 3px;
+        margin-bottom: 2px;
+        font-size: 11px;
         text-decoration: none;
+        display: inline-block;
     }
-    .btn-edit:hover { background: orange; }
+    .btn-edit:hover { background: #ff8c00; }
     .btn-delete { background: #dc3545; }
     .btn-delete:hover { background: #c82333; }
 
     td.address-cell {
         white-space: pre-wrap;
         word-wrap: break-word;
-        max-width: 200px;
+        max-width: 150px;
+        font-size: 18px;
+        padding: 10px 12px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+        vertical-align: top;
     }
 
     /* ✅ Modal */
@@ -202,7 +230,7 @@
     .alert {
         padding: 15px;
         margin: 20px auto;
-        max-width: 1400px;
+        max-width: 1600px;
         border-radius: 5px;
         position: relative;
     }
@@ -216,18 +244,100 @@
         border: 1px solid #f5c6cb;
         color: #721c24;
     }
-.complaint-note {
-    margin-left: 20px;
-    margin-bottom: 10px;
-    font-size: 14px;
-    color: #444;
-    white-space: pre-wrap;
-    word-wrap: break-word;
-    background: #f9f9f9;
-    padding: 6px 8px;
-    border-radius: 4px;
-    border: 1px solid #ddd;
-}
+
+    .customer-row {
+        background: #f8f9fa;
+        border-left: 4px solid #007bff;
+    }
+
+    .actions-cell {
+        min-width: 120px;
+    }
+
+    .serial-cell, .config-cell {
+        min-width: 120px;
+        max-width: 140px;
+        word-break: break-word;
+    }
+
+    .serial-item, .config-item {
+        margin-bottom: 8px;
+        padding: 6px 8px;
+       
+        border-radius: 4px;
+        
+        font-size: 13px;
+        line-height: 1.4;
+    }
+
+    .complaints-cell {
+        min-width: 250px;
+        max-width: 300px;
+    }
+
+    .item-name-cell {
+        min-width: 150px;
+        max-width: 180px;
+    }
+
+    .created-date-cell {
+        min-width: 100px;
+        max-width: 120px;
+        font-size: 18px;
+    }
+
+    /* Column widths - Updated order */
+    th:nth-child(1) { width: 60px; } /* Sl No */
+    th:nth-child(2) { width: 140px; } /* Customer */
+    th:nth-child(3) { width: 150px; } /* Address */
+    th:nth-child(4) { width: 100px; } /* Phone */
+    th:nth-child(5) { width: 180px; } /* Item Names */
+    th:nth-child(6) { width: 300px; } /* Complaints & Images */
+    th:nth-child(7) { width: 140px; } /* Serial Numbers */
+    th:nth-child(8) { width: 140px; } /* Configurations */
+    th:nth-child(9) { width: 110px; } /* Created Date */
+    th:nth-child(10) { width: 130px; } /* Actions */
+
+    .item-name-box {
+        margin-bottom: 8px;
+        padding: 8px 10px;
+        background: #e8f4fd;
+        border-radius: 4px;
+     
+        font-weight: bold;
+        color: #0056b3;
+    }
+
+    .complaint-item-section {
+        margin-bottom: 12px;
+        padding: 8px;
+        
+        border-radius: 4px;
+       
+    }
+
+    .complaint-item-title {
+        font-weight: bold;
+      
+        margin-bottom: 6px;
+        font-size: 13px;
+    }
+
+    .serial-config-label {
+        font-weight: bold;
+        color: #007bff;
+        font-size: 12px;
+        margin-bottom: 3px;
+    }
+
+    .serial-config-value {
+        color: #333;
+        font-size: 18px;
+       
+        padding: 3px 6px;
+        border-radius: 3px;
+      
+    }
 </style>
 </head>
 <body>
@@ -253,110 +363,135 @@
                 <th>Customer Name</th>
                 <th>Address</th>
                 <th>Phone No</th>
-                <th>Item Name</th>
+                <th>Item Names</th>
                 <th>Complaints & Images</th>
-                <th>Serial No</th>
-                <th>Configuration</th>
-                <th>Notes</th>
+                <th>Serial Numbers</th>
+                <th>Configurations</th>
                 <th>Created Date</th>
                 <th>Actions</th>
             </tr>
         </thead>
         <tbody>
-        {% for job in jobcards %}
-            <tr data-job-id="{{ job.pk }}">
+        {% regroup jobcards by customer as customer_groups %}
+        {% for customer_group in customer_groups %}
+            <tr class="customer-row" data-customer="{{ customer_group.grouper }}">
                 <td>{{ forloop.counter }}</td>
-                <td>{{ job.customer }}</td>
-                <td class="address-cell">{{ job.address }}</td>
-                <td>{{ job.phone }}</td>
-                <td>{{ job.item }}</td>
-                <td>
-                    {% for complaint in job.complaints.all %}
-                        <div class="complaint-box">
-                            <span class="complaint-text">{{ complaint.description }}</span>
-                            {% if complaint.images.all %}
-                                <i class="fas fa-images icon-btn icon-image"
-                                   title="View Images"
-                                   onclick="showImages([{% for img in complaint.images.all %}'{{ img.image.url }}?v={{ img.id }}'{% if not forloop.last %}, {% endif %}{% endfor %}])"></i>
-                            {% endif %}
-                            {% if complaint.notes %}
-                                <i class="fas fa-file-alt icon-btn icon-note"
-                                   title="View Complaint Note"
-                                   onclick="showNotePopup('{{ complaint.notes|escapejs }}')"></i>
-                            {% endif %}
+                <td><strong>{{ customer_group.grouper }}</strong></td>
+                <td class="address-cell">{{ customer_group.list.0.address }}</td>
+                <td>{{ customer_group.list.0.phone }}</td>
+                
+                <!-- Item Names Column -->
+                  <td class="item-name-cell">
+                    {% for job in customer_group.list %}
+                        <div class="item-name-box">
+                            {{ forloop.counter }}. {{ job.item }}
                         </div>
                     {% endfor %}
                 </td>
-                <td>{{ job.serial|default:"N/A" }}</td>
-                <td>{{ job.config|default:"N/A" }}</td>
-                <td>
-                    {% if job.notes %}
-                        <i class="fas fa-file-contract icon-btn icon-note"
-                           title="View General Note"
-                           onclick="showNotePopup('{{ job.notes|escapejs }}')"></i>
-                    {% else %}
-                        --
-                    {% endif %}
+                
+                 <td class="complaints-cell">
+                    {% for job in customer_group.list %}
+                        <div class="complaint-item-section">
+                            <div class="complaint-item-title"></div>
+                            {% if job.complaints.all %}
+                                {% for complaint in job.complaints.all %}
+                                    <div class="complaint-box">
+                                        <span class="complaint-text">• {{ complaint.description }}</span>
+                                       {% if complaint.images.all %}
+    <i class="fas fa-images icon-btn icon-image" ...></i>
+    <div class="image-preview">
+        {% for img in complaint.images.all %}
+            <img src="{{ img.image.url }}" alt="Complaint Image">
+        {% endfor %}
+    </div>
+{% endif %}
+
+                                        {% if complaint.notes %}
+                                            <i class="fas fa-file-alt icon-btn icon-note"
+                                               title="View Complaint Note"
+                                               onclick="showNotePopup('{{ complaint.notes|escapejs }}')"></i>
+                                        {% endif %}
+                                    </div>
+                                {% endfor %}
+                            {% else %}
+                                <div class="complaint-box">
+                                    <span class="complaint-text" style="color: #666; font-style: italic;">No complaints</span>
+                                </div>
+                            {% endif %}
+                     
+                    {% endfor %}
                 </td>
-                <td>{{ job.created_at|date:"M d Y" }}</td>
-                <td>
-                    <a href="{% url 'jobcard_edit' job.pk %}" class="btn-edit"><i class="fas fa-edit"></i></a>
-                    <a href="javascript:void(0)" class="btn-delete" onclick="confirmDelete(this)" data-job-id="{{ job.pk }}"><i class="fas fa-trash"></i></a>
+                
+                <!-- Serial Numbers Column -->
+                <td class="serial-cell">
+                    {% for job in customer_group.list %}
+                        <div class="serial-item">
+                            <div class="serial-config-value">{{ job.serial|default:"N/A" }}</div>
+                        </div>
+                    {% endfor %}
+                </td>
+                
+                <!-- Configurations Column -->
+                <td class="config-cell">
+                    {% for job in customer_group.list %}
+                        <div class="config-item">
+                            <div class="serial-config-value">{{ job.config|default:"N/A" }}</div>
+                        </div>
+                    {% endfor %}
+                </td>
+
+               <!-- Delete Modal -->
+              <div id="deleteModal" class="modal">
+                <div class="modal-content">
+               <span class="close-btn" onclick="closeDeleteModal()">&times;</span>
+             <p id="deleteMessage"></p>
+             <div class="delete-actions">
+            <button class="btn-confirm" onclick="deleteJobCard()">Yes, Delete</button>
+            <button class="btn-cancel" onclick="closeDeleteModal()">Cancel</button>
+             </div>
+             </div>
+              </div>
+
+
+
+                <!-- Note Modal -->
+               <div id="noteModal" class="modal">
+                <div class="modal-content">
+                <span class="close-btn" onclick="closeNotePopup()">&times;</span>
+                <p id="noteText"></p>
+                </div>
+                </div>
+
+
+
+                <!-- Created Date Column -->
+                <td class="created-date-cell">{{ customer_group.list.0.created_at|date:"M d Y" }}</td>
+                
+                <!-- Actions Column -->
+                <td class="actions-cell">
+                    {% for job in customer_group.list %}
+                        <div style="margin-bottom: 8px; padding: 6px; border: 1px solid #e0e0e0; border-radius: 4px; background: #fff;">
+                            <div style="font-weight: bold; color: #007bff; font-size: 12px; margin-bottom: 4px;"></div>
+                            <a href="{% url 'jobcard_edit' job.pk %}" class="btn-edit" title="Edit {{ job.item }}">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <a href="javascript:void(0)" class="btn-delete" onclick="confirmDelete(this)" 
+                               data-job-id="{{ job.pk }}" data-item-name="{{ job.item }}" 
+                               title="Delete {{ job.item }}">
+                                <i class="fas fa-trash"></i> 
+                            </a>
+                        </div>
+                    {% endfor %}
                 </td>
             </tr>
         {% empty %}
             <tr>
-                <td colspan="11" style="text-align:center;">No Job Cards Found</td>
+                <td colspan="10" style="text-align:center;">No Job Cards Found</td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
 </div>
-
-<!-- IMAGE MODAL -->
-<div class="modal" id="imageModal">
-    <div class="modal-content">
-        <span class="close-btn" onclick="closeImageModal()">&times;</span>
-        <img id="currentImage" src="" alt="Image">
-        <div class="gallery-nav">
-            <button onclick="prevImage()">Prev</button>
-            <button onclick="nextImage()">Next</button>
-        </div>
-    </div>
-</div>
-
-<!-- NOTE MODAL -->
-<div class="modal" id="noteModal">
-    <div class="modal-content" style="max-height: 80vh; overflow-y: auto;">
-        <span class="close-btn" onclick="closeNotePopup()">&times;</span>
-        <h3 style="color:#333;">Complaint Note</h3>
-        <pre id="noteText" style="
-            white-space: pre-wrap;
-            word-wrap: break-word;
-            font-size: 15px;
-            color: #333;
-            text-align: left;
-            line-height: 1.6;
-            background: #f7f7f7;
-            padding: 12px;
-            border-radius: 6px;
-            border: 1px solid #ccc;
-        "></pre>
-    </div>
-</div>
-
-<!-- DELETE CONFIRM MODAL -->
-<div class="modal" id="deleteModal">
-    <div class="modal-content">
-        <span class="close-btn" onclick="closeDeleteModal()">&times;</span>
-        <h3>Are you sure you want to delete this job card?</h3>
-        <div class="delete-actions">
-            <button class="btn-confirm" onclick="deleteJobCard()">Yes, Delete</button>
-            <button class="btn-cancel" onclick="closeDeleteModal()">Cancel</button>
-        </div>
-    </div>
-</div>
-
 <script>
 let imageList = [];
 let currentIndex = 0;
@@ -426,8 +561,11 @@ function closeNotePopup() {
 }
 
 function confirmDelete(element) {
-    rowToDelete = element.closest('tr');
+    const itemName = element.getAttribute('data-item-name');
     jobIdToDelete = element.getAttribute('data-job-id');
+    
+    document.getElementById('deleteMessage').innerHTML = 
+        `Are you sure you want to delete the item "<strong>${itemName}</strong>"?`;
     document.getElementById('deleteModal').style.display = 'flex';
 }
 
@@ -452,12 +590,11 @@ function deleteJobCard() {
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            if (rowToDelete) {
-                rowToDelete.remove();
-                updateSerialNumbers();
-            }
             showAlert(data.message, 'success');
-            closeDeleteModal();
+            // Reload the page to refresh the grouped view
+            setTimeout(() => {
+                window.location.reload();
+            }, 1000);
         } else {
             showAlert(data.error || 'Error deleting job card', 'error');
         }
@@ -475,29 +612,28 @@ function deleteJobCard() {
 
 function closeDeleteModal() {
     document.getElementById('deleteModal').style.display = 'none';
-    rowToDelete = null;
     jobIdToDelete = null;
 }
 
-function updateSerialNumbers() {
-    const rows = document.querySelectorAll('#jobTable tbody tr');
-    let counter = 1;
-    rows.forEach(row => {
-        const firstCell = row.querySelector('td:first-child');
-        if (firstCell && !row.querySelector('td[colspan]')) {
-            firstCell.textContent = counter++;
-        }
-    });
-}
-
 document.getElementById('searchInput').addEventListener('keyup', function() {
-    const input = this.value.toLowerCase().trim();
+    const input = this.value.toLowerCase().trim().replace(/[^a-z]/g, ''); // Remove non-alphabetic characters
     const rows = document.querySelectorAll("#jobTable tbody tr");
+
     rows.forEach(row => {
         if (row.querySelector('td[colspan]')) return;
+
         const customer = row.cells[1]?.innerText.toLowerCase().trim() || "";
-        const item = row.cells[4]?.innerText.toLowerCase().trim() || "";
-        if (customer.startsWith(input) || item.startsWith(input) || input === "") {
+        const itemsCell = row.cells[4]?.querySelectorAll('.item-name-box') || [];
+
+        let itemNames = [];
+        itemsCell.forEach(itemBox => {
+            itemNames.push(itemBox.innerText.toLowerCase().trim().replace(/[^a-z]/g, '')); // Remove non-alphabetic characters
+        });
+
+        const matchesCustomer = customer.startsWith(input);
+        const matchesItem = itemNames.some(itemName => itemName.startsWith(input));
+
+        if (matchesCustomer || matchesItem || input === "") {
             row.style.display = "";
         } else {
             row.style.display = "none";

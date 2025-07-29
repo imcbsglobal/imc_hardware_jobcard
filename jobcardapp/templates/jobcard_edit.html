@@ -1,9 +1,8 @@
-<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Edit Job Card</title>
+<title>Update Job Card</title>
 <style>
     body {
         font-family: 'Segoe UI', Tahoma, sans-serif;
@@ -11,300 +10,284 @@
         padding: 30px;
         margin: 0;
     }
-
     .form-container {
         background: #fff;
-        max-width: 900px;
+        max-width: 1200px;
         margin: auto;
-        padding: 30px 35px;
+        padding: 40px 45px;
         border-radius: 12px;
         box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        position: relative;
     }
-
     h2 {
         text-align: center;
-        margin-bottom: 20px;
+        margin-bottom: 30px;
         font-size: 28px;
         color: #222;
     }
 
-    .form-group {
-        margin-bottom: 16px;
+    .form-row {
+        display: flex;
+        gap: 20px;
+        flex-wrap: wrap;
+        margin-bottom: 20px;
     }
 
+    .customer-section {
+        background: #f8f9fa;
+        padding: 25px;
+        border-radius: 10px;
+        margin-bottom: 30px;
+        border: 1px solid #e9ecef;
+    }
+    .customer-section h3 {
+        margin-bottom: 20px;
+        color: #495057;
+        font-size: 18px;
+        font-weight: 600;
+    }
+
+    .form-group {
+        flex: 1;
+        margin-bottom: 20px;
+    }
     .form-group label {
         display: block;
-        font-weight: bold;
+        font-weight: 600;
         margin-bottom: 8px;
+        font-size: 14px;
         color: #333;
     }
-
     .form-group input,
     .form-group select,
     .form-group textarea {
         width: 100%;
-        padding: 12px 14px;
-        font-size: 15px;
-        border: 1px solid #ccc;
+        padding: 10px 12px;
+        font-size: 14px;
+        border: 2px solid #e1e8ed;
         border-radius: 8px;
         background: #fafafa;
         outline: none;
-        transition: 0.3s;
+        transition: all 0.3s ease;
+        box-sizing: border-box;
     }
-
     .form-group input:focus,
     .form-group select:focus,
     .form-group textarea:focus {
-        border-color: #007bff;
+        border-color: #28a745;
         background: #fff;
-        box-shadow: 0 0 6px rgba(0,123,255,0.3);
+        box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.1);
     }
-
     .form-group textarea {
-        min-height: 90px;
+        min-height: 80px;
         resize: vertical;
     }
 
-    #complaintsSection,
-    #detailsSection {
-        margin-top: 20px;
-        padding: 18px;
-        border: 1px solid #ddd;
-        border-radius: 10px;
-        background: #f9f9f9;
+    .item-block {
+        border: 2px solid #dee2e6;
+        padding: 25px;
+        border-radius: 12px;
+        margin-bottom: 25px;
+        background: #fdfdfd;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+    .item-block h3 {
+        margin-bottom: 15px;
+        color: #444;
+        font-size: 20px;
+        font-weight: 600;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #e9ecef;
     }
 
+    .complaints-section {
+        background: #f1f3f4;
+        padding: 20px;
+        border-radius: 10px;
+        margin: 20px 0;
+        border: 1px solid #d1ecf1;
+    }
     .complaint-block {
-        padding: 18px;
-        margin-bottom: 14px;
-        background: #fff;
-        border: 1px solid #ccc;
-        border-radius: 10px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-        position: relative;
-    }
-
-    .btn-add {
-        padding: 10px 16px;
-        background: #007bff;
-        color: #fff;
-        font-weight: bold;
-        border: none;
+        background: white;
+        padding: 15px;
         border-radius: 8px;
-        cursor: pointer;
-        margin-top: 10px;
-        display: inline-block;
+        margin-bottom: 15px;
+        border: 1px solid #e9ecef;
+    }
+    .complaint-fields-row {
+        display: flex;
+        gap: 15px;
+        flex-wrap: wrap;
     }
 
-    .btn-add:hover { background: #0056b3; }
+    .serial-config-row {
+        display: flex;
+        gap: 20px;
+        margin-top: 20px;
+        flex-wrap: wrap;
+    }
 
-    .btn-remove {
-        background: #dc3545;
-        color: #fff;
-        border: none;
-        padding: 6px 10px;
-        border-radius: 6px;
-        margin-top: 8px;
+    .btn-add, .btn-remove {
+        padding: 8px 15px;
         font-size: 14px;
-        cursor: pointer;
-    }
-
-    .btn-remove:hover { background: #c82333; }
-
-    .delete-complaint-btn {
-        position: absolute;
-        top: 10px;
-        right: 10px;
-        background: #ff2d55;
-        color: #fff;
-        border: none;
-        font-size: 14px;
-        padding: 6px 10px;
+        font-weight: 600;
         border-radius: 6px;
+        border: none;
         cursor: pointer;
+        margin-top: 12px;
+        margin-right: 10px;
     }
+    .btn-add { background: green; color: #fff; }
+    .btn-add:hover { background: green; }
+    .btn-remove { background: #dc3545; color: #fff; }
+    .btn-remove:hover { background: #b52a37; }
 
-    .delete-complaint-btn:hover { background: #e60039; }
-
-    /* Submit Button */
     .btn-submit {
         display: block;
-        margin: 20px auto;
-        padding: 10px 24px;
+        margin: 30px auto;
+        padding: 15px 40px;
         background: #000;
         color: #fff;
         font-size: 16px;
-        font-weight: bold;
         border: none;
         border-radius: 8px;
         cursor: pointer;
+        font-weight: 600;
     }
-
     .btn-submit:hover { background: #333; }
 
-    /* Back Button */
-    .back-btn {
-        position: absolute;
-        top: 20px;
-        left: 20px;
-        margin-left: 150px;
-        padding: 8px 18px;
-        background: black;
-        color: #fff;
-        font-size: 14px;
-        font-weight: 500;
+    .add-item-btn {
+        background: green;
+        color: white;
+        padding: 12px 25px;
+        font-size: 15px;
+        font-weight: 600;
         border: none;
         border-radius: 8px;
         cursor: pointer;
-        text-decoration: none;
+        margin: 20px 0;
     }
-
-    .back-btn:hover {
-        background: #5a6268;
-    }
+    .add-item-btn:hover { background: green; }
 
     .preview-container {
         display: flex;
         flex-wrap: wrap;
-        gap: 10px;
+        gap: 8px;
         margin-top: 10px;
     }
-
-    .image-item, .existing-img {
-        position: relative;
-        display: inline-block;
-    }
-
     .preview-container img {
-        width: 90px;
-        height: 90px;
+        width: 70px;
+        height: 70px;
         object-fit: cover;
-        border: 1px solid #ccc;
-        border-radius: 8px;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        border-radius: 6px;
+        border: 2px solid #dee2e6;
     }
 
-    .remove-image, .remove-old {
-        position: absolute;
-        top: -5px;
-        right: -5px;
-        background: #dc3545;
-        color: white;
-        border: none;
-        border-radius: 50%;
-        width: 20px;
-        height: 20px;
-        font-size: 12px;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+    .error-text {
+        color: red;
+        font-size: 13px;
+        margin-top: 5px;
+        display: none;
     }
 
     @media (max-width: 768px) {
-        .form-container { padding: 20px; }
-        h2 { font-size: 24px; }
-        .btn-submit { font-size: 15px; }
+        .form-row,
+        .serial-config-row,
+        .complaint-fields-row { flex-direction: column; }
     }
 </style>
 </head>
 <body>
-<div class="form-container">
-    <a href="{% url 'jobcard_list' %}" class="back-btn">← Back</a>
-    <h2>Edit Job Card</h2>
-    <form action="{% url 'jobcard_edit' job.id %}" method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
 
-        <!-- Customer Info -->
+<div class="form-container">
+<h2>Update Job Card</h2>
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <!-- Customer Info -->
+    <div class="customer-section">
+        <h3>Customer Information</h3>
         <div class="form-group">
             <label>Customer Name *</label>
-            <input type="text" name="customer" value="{{ job.customer }}" required>
+            <input type="text" name="customer" value="John Doe" required>
         </div>
         <div class="form-group">
             <label>Address *</label>
-            <textarea name="address" required>{{ job.address }}</textarea>
+            <textarea name="address" required>123 Main Street, Anytown, USA</textarea>
         </div>
-        <div class="form-group">
-            <label>Phone *</label>
-            <input type="number" name="phone" value="{{ job.phone }}" required>
-        </div>
+         <div class="form-group">
+        <label>Phone number *</label>
+        <input type="tel" id="phone" name="phone" maxlength="10" minlength="10" pattern="[0-9]{10}" placeholder="Enter phone number" value="1234567890" required>
+        
+    </div>
+    </div>
 
-        <!-- Item Selection -->
-        <div class="form-group">
-            <label>Item *</label>
-            <select name="item" required>
-                <option value="">Select Item</option>
-                {% for item in items %}
-                    <option value="{{ item }}" {% if job.item == item %}selected{% endif %}>{{ item }}</option>
-                {% endfor %}
-            </select>
-        </div>
+    <!-- Items -->
+    <div id="itemsContainer">
+        <!-- Default Item Block -->
+        <div class="item-block" id="item-0">
+            <h3>Item 1</h3>
+            <div class="form-group">
+                <label>Select Item *</label>
+                <select name="items[]" onchange="toggleItemFields(this, 0)" required>
+                    <option value="">Select Item</option>
+                    <option value="Mouse" selected>Mouse</option>
+                    <option value="Keyboard">Keyboard</option>
+                    <option value="Laptop">Laptop</option>
+                    <option value="Printer">Printer</option>
+                </select>
+            </div>
 
-        <!-- Hidden container for images to be removed -->
-        <div id="removeImagesContainer"></div>
-
-        <!-- Complaints -->
-        <div id="complaintsSection">
-            <h3>Complaints & Images</h3>
-            <div id="complaintsContainer">
-                {% for complaint in job.complaints.all %}
-                <div class="complaint-block" id="block-{{ forloop.counter0 }}">
-                    <input type="hidden" name="complaint_ids[]" value="{{ complaint.id }}">
-                    <h4>Complaint {{ forloop.counter }}</h4>
-                    <button type="button" class="delete-complaint-btn" onclick="deleteExistingComplaint({{ forloop.counter0 }}, {{ complaint.id }})">Delete</button>
-                    <div class="form-group">
-                        <label>Complaint Description</label>
-                        <input type="text" name="complaints[]" value="{{ complaint.description }}" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Existing Images</label>
-                        <div class="preview-container" id="preview-{{ forloop.counter0 }}">
-                            {% for img in complaint.images.all %}
-                            <div class="existing-img" id="old-img-{{ img.id }}">
-                                <img src="{{ img.image.url }}?v={{ img.id }}" alt="">
-                                <button type="button" class="remove-old" onclick="removeOldImage({{ img.id }})">×</button>
+            <div class="hidden-section" id="item-fields-0" style="display:block;">
+                <div class="complaints-section">
+                    <h4>Complaints</h4>
+                    <div id="complaints-container-0">
+                        <div class="complaint-block" id="complaint-0-0">
+                            <div class="complaint-fields-row">
+                                <div class="form-group">
+                                    <label>Description</label>
+                                    <input type="text" name="complaints-0[]" value="Not working" placeholder="Enter Complaint">
+                                </div>
+                                <div class="form-group">
+                                    <label>Images</label>
+                                    <input type="file" name="images-0-0[]" multiple accept="image/*" onchange="appendPreviewImages(event,'0-0')">
+                                    <div class="preview-container" id="preview-0-0">
+                                        <img src="path/to/image1.jpg" alt="Preview">
+                                        <img src="path/to/image2.jpg" alt="Preview">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>Notes</label>
+                                    <input type="text" name="notes-0[]" value="Customer is very upset" placeholder="Additional notes...">
+                                </div>
                             </div>
-                            {% endfor %}
                         </div>
-                        <label>Add New Images</label>
-                        <input type="file" name="images-{{ forloop.counter0 }}" multiple accept="image/*" onchange="previewImages(event, {{ forloop.counter0 }})">
+                    </div>
+                    <button type="button" class="btn-add" onclick="addComplaint(0)">+ Add Complaint</button>
+                </div>
+
+                <div class="serial-config-row">
+                    <div class="form-group">
+                        <label>Serial Number *</label>
+                        <input type="text" name="serials[]" value="ABC12345" maxlength="20" oninput="validateSerial(this)">
+                        <div class="error-text">Duplicate or invalid serial number!</div>
                     </div>
                     <div class="form-group">
-                        <label>Notes</label>
-                        <input type="text" name="notes[]" value="{{ complaint.notes }}">
+                        <label>Configuration *</label>
+                        <input type="text" name="configs[]" value="Standard">
                     </div>
                 </div>
-                {% endfor %}
             </div>
-            <button type="button" class="btn-add" onclick="addComplaint()">+ Add Another Complaint</button>
+            <button type="button" class="btn-remove" onclick="removeItem(0)">Remove Item</button>
         </div>
+    </div>
 
-        <!-- Item Details -->
-        <div id="detailsSection">
-            <h3>Item Details</h3>
-            <div class="form-group">
-                <label>Serial Number</label>
-                <input type="text" name="serial" value="{{ job.serial }}" maxlength="20" oninput="formatSerial(this)" required>
-            </div>
-            <div class="form-group">
-                <label>Configuration</label>
-                <input type="text" name="config" value="{{ job.config }}" required>
-            </div>
-        </div>
-
-        <!-- General Notes -->
-        <div class="form-group">
-            <label>General Notes</label>
-            <textarea name="general_notes">{{ job.notes }}</textarea>
-        </div>
-
-        <button class="btn-submit" type="submit">Update Job Card</button>
-    </form>
+    <button type="button" class="add-item-btn" onclick="addItem()">+ Add Item</button>
+    <button class="btn-submit" type="submit">Update Job Card</button>
+</form>
 </div>
 
 <script>
-let count = {{ job.complaints.count }};
+let count : {{ job.complaints.count }};
 let imageArrays = {};
 
 function addComplaint() {
