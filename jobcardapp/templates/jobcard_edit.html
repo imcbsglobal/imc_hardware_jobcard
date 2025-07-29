@@ -208,78 +208,86 @@
         <h3>Customer Information</h3>
         <div class="form-group">
             <label>Customer Name *</label>
-            <input type="text" name="customer" value="John Doe" required>
+           <input type="text" name="customer" value="{{ job.customer }}" required>
         </div>
         <div class="form-group">
             <label>Address *</label>
-            <textarea name="address" required>123 Main Street, Anytown, USA</textarea>
+            <textarea name="address" required>{{ job.address }}</textarea>
         </div>
          <div class="form-group">
         <label>Phone number *</label>
-        <input type="tel" id="phone" name="phone" maxlength="10" minlength="10" pattern="[0-9]{10}" placeholder="Enter phone number" value="1234567890" required>
+        <input type="tel" name="phone" value="{{ job.phone }}" maxlength="10" minlength="10" pattern="[0-9]{10}" required>
         
     </div>
     </div>
 
     <!-- Items -->
-    <div id="itemsContainer">
-        <!-- Default Item Block -->
-        <div class="item-block" id="item-0">
-            <h3>Item 1</h3>
-            <div class="form-group">
-                <label>Select Item *</label>
-                <select name="items[]" onchange="toggleItemFields(this, 0)" required>
-                    <option value="">Select Item</option>
-                    <option value="Mouse" selected>Mouse</option>
-                    <option value="Keyboard">Keyboard</option>
-                    <option value="Laptop">Laptop</option>
-                    <option value="Printer">Printer</option>
-                </select>
-            </div>
+<div id="itemsContainer">
+  {% for item in job.items.all %}
+  <div class="item-block" id="item-{{ forloop.counter0 }}">
+    <h3>Item {{ forloop.counter }}</h3>
 
-            <div class="hidden-section" id="item-fields-0" style="display:block;">
-                <div class="complaints-section">
-                    <h4>Complaints</h4>
-                    <div id="complaints-container-0">
-                        <div class="complaint-block" id="complaint-0-0">
-                            <div class="complaint-fields-row">
-                                <div class="form-group">
-                                    <label>Description</label>
-                                    <input type="text" name="complaints-0[]" value="Not working" placeholder="Enter Complaint">
-                                </div>
-                                <div class="form-group">
-                                    <label>Images</label>
-                                    <input type="file" name="images-0-0[]" multiple accept="image/*" onchange="appendPreviewImages(event,'0-0')">
-                                    <div class="preview-container" id="preview-0-0">
-                                        <img src="path/to/image1.jpg" alt="Preview">
-                                        <img src="path/to/image2.jpg" alt="Preview">
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label>Notes</label>
-                                    <input type="text" name="notes-0[]" value="Customer is very upset" placeholder="Additional notes...">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <button type="button" class="btn-add" onclick="addComplaint(0)">+ Add Complaint</button>
-                </div>
-
-                <div class="serial-config-row">
-                    <div class="form-group">
-                        <label>Serial Number *</label>
-                        <input type="text" name="serials[]" value="ABC12345" maxlength="20" oninput="validateSerial(this)">
-                        <div class="error-text">Duplicate or invalid serial number!</div>
-                    </div>
-                    <div class="form-group">
-                        <label>Configuration *</label>
-                        <input type="text" name="configs[]" value="Standard">
-                    </div>
-                </div>
-            </div>
-            <button type="button" class="btn-remove" onclick="removeItem(0)">Remove Item</button>
-        </div>
+    <div class="form-group">
+      <label>Select Item *</label>
+      <select name="items[]" onchange="toggleItemFields(this, {{ forloop.counter0 }})" required>
+        <option value="">Select Item</option>
+        <option value="Mouse" {% if item.name == 'Mouse' %}selected{% endif %}>Mouse</option>
+        <option value="Keyboard" {% if item.name == 'Keyboard' %}selected{% endif %}>Keyboard</option>
+        <option value="Laptop" {% if item.name == 'Laptop' %}selected{% endif %}>Laptop</option>
+        <option value="Printer" {% if item.name == 'Printer' %}selected{% endif %}>Printer</option>
+      </select>
     </div>
+
+    <div class="hidden-section" id="item-fields-{{ forloop.counter0 }}" style="display:block;">
+      <div class="complaints-section">
+        <h4>Complaints</h4>
+        <div id="complaints-container-{{ forloop.counter0 }}">
+          {% for complaint in item.complaints.all %}
+          <div class="complaint-block" id="complaint-{{ forloop.parentloop.counter0 }}-{{ forloop.counter0 }}">
+            <div class="complaint-fields-row">
+              <div class="form-group">
+                <label>Description</label>
+                <input type="text" name="complaints-{{ forloop.parentloop.counter0 }}[]" value="{{ complaint.description }}">
+              </div>
+
+              <div class="form-group">
+                <label>Images</label>
+                <input type="file" name="images-{{ forloop.parentloop.counter0 }}-{{ forloop.counter0 }}[]" multiple accept="image/*" onchange="appendPreviewImages(event, '{{ forloop.parentloop.counter0 }}-{{ forloop.counter0 }}')">
+                <div class="preview-container" id="preview-{{ forloop.parentloop.counter0 }}-{{ forloop.counter0 }}">
+                  {% for image in complaint.images.all %}
+                    <img src="{{ image.image.url }}" alt="Preview">
+                  {% endfor %}
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label>Notes</label>
+                <input type="text" name="notes-{{ forloop.parentloop.counter0 }}[]" value="{{ complaint.note }}">
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+        <button type="button" class="btn-add" onclick="addComplaint({{ forloop.counter0 }})">+ Add Complaint</button>
+      </div>
+
+      <div class="serial-config-row">
+        <div class="form-group">
+          <label>Serial Number *</label>
+          <input type="text" name="serials[]" value="{{ item.serial }}">
+          <div class="error-text">Duplicate or invalid serial number!</div>
+        </div>
+        <div class="form-group">
+          <label>Configuration *</label>
+          <input type="text" name="configs[]" value="{{ item.config }}">
+        </div>
+      </div>
+    </div>
+    <button type="button" class="btn-remove" onclick="removeItem({{ forloop.counter0 }})">Remove Item</button>
+  </div>
+  {% endfor %}
+</div>
+
 
     <button type="button" class="add-item-btn" onclick="addItem()">+ Add Item</button>
     <button class="btn-submit" type="submit">Update Job Card</button>
@@ -287,103 +295,100 @@
 </div>
 
 <script>
-let count : {{ job.complaints.count }};
-let imageArrays = {};
+let itemIndex = {{ job.items.count|default:0 }};
+function addItem() {
+  const container = document.getElementById("itemsContainer");
 
-function addComplaint() {
-    let container = document.getElementById('complaintsContainer');
-    let div = document.createElement('div');
-    div.classList.add('complaint-block');
-    div.id = `block-${count}`;
-    div.innerHTML = `
-        <h4>Complaint ${count + 1}</h4>
-        <button type="button" class="delete-complaint-btn" onclick="removeComplaint(${count})">Delete</button>
-        <input type="hidden" name="complaint_ids[]" value="">
-        <div class="form-group">
-            <label>Complaint Description</label>
-            <input type="text" name="complaints[]" required>
+  const itemHTML = `
+    <div class="item-block" id="item-${itemIndex}">
+      <h3>Item ${itemIndex + 1}</h3>
+
+      <div class="form-group">
+        <label>Select Item *</label>
+        <select name="items[]" onchange="toggleItemFields(this, ${itemIndex})" required>
+          <option value="">Select Item</option>
+          <option value="Mouse">Mouse</option>
+          <option value="Keyboard">Keyboard</option>
+          <option value="Laptop">Laptop</option>
+          <option value="Printer">Printer</option>
+        </select>
+      </div>
+
+      <div class="hidden-section" id="item-fields-${itemIndex}" style="display: block;">
+        <div class="complaints-section">
+          <h4>Complaints</h4>
+          <div id="complaints-container-${itemIndex}"></div>
+          <button type="button" class="btn-add" onclick="addComplaint(${itemIndex})">+ Add Complaint</button>
         </div>
-        <div class="form-group">
-            <label>Images</label>
-            <div class="preview-container" id="preview-${count}"></div>
-            <input type="file" name="images-${count}" multiple accept="image/*" onchange="previewImages(event, ${count})">
+
+        <div class="serial-config-row">
+          <div class="form-group">
+            <label>Serial Number *</label>
+            <input type="text" name="serials[]" value="">
+            <div class="error-text">Duplicate or invalid serial number!</div>
+          </div>
+          <div class="form-group">
+            <label>Configuration *</label>
+            <input type="text" name="configs[]" value="">
+          </div>
         </div>
+      </div>
+
+      <button type="button" class="btn-remove" onclick="removeItem(${itemIndex})">Remove Item</button>
+    </div>
+  `;
+
+  container.insertAdjacentHTML("beforeend", itemHTML);
+  itemIndex++;
+}
+
+function removeItem(index) {
+  const block = document.getElementById("item-" + index);
+  if (block) block.remove();
+}
+
+function addComplaint(itemIdx) {
+  const container = document.getElementById(`complaints-container-${itemIdx}`);
+  const count = container.children.length;
+
+  const complaintHTML = `
+    <div class="complaint-block" id="complaint-${itemIdx}-${count}">
+      <div class="complaint-fields-row">
         <div class="form-group">
-            <label>Notes</label>
-            <input type="text" name="notes[]">
+          <label>Description</label>
+          <input type="text" name="complaints-${itemIdx}[]" value="">
         </div>
-    `;
-    container.appendChild(div);
-    imageArrays[count] = [];
-    count++;
+
+        <div class="form-group">
+          <label>Images</label>
+          <input type="file" name="images-${itemIdx}-${count}[]" multiple accept="image/*" onchange="appendPreviewImages(event, '${itemIdx}-${count}')">
+          <div class="preview-container" id="preview-${itemIdx}-${count}"></div>
+        </div>
+
+        <div class="form-group">
+          <label>Notes</label>
+          <input type="text" name="notes-${itemIdx}[]" value="">
+        </div>
+      </div>
+    </div>
+  `;
+  container.insertAdjacentHTML("beforeend", complaintHTML);
 }
 
-function removeComplaint(index) {
-    document.getElementById(`block-${index}`).remove();
-    delete imageArrays[index];
-}
-
-function deleteExistingComplaint(index, complaintId) {
-    let block = document.getElementById(`block-${index}`);
-    block.innerHTML = `<input type="hidden" name="delete_complaints[]" value="${complaintId}">`;
-    block.style.display = 'none';
-}
-
-function previewImages(event, index) {
-    const files = event.target.files;
-    if (!imageArrays[index]) imageArrays[index] = [];
-    for (let i = 0; i < files.length; i++) imageArrays[index].push(files[i]);
-    rebuildPreview(index);
-}
-
-function rebuildPreview(index) {
-    const previewContainer = document.getElementById('preview-' + index);
-    previewContainer.querySelectorAll('.image-item').forEach(el => el.remove());
-    imageArrays[index].forEach((file, fileIndex) => {
-        const imageItem = document.createElement('div');
-        imageItem.className = 'image-item';
-        const img = document.createElement('img');
-        img.src = URL.createObjectURL(file);
-        img.onload = () => URL.revokeObjectURL(img.src);
-        const removeBtn = document.createElement('button');
-        removeBtn.className = 'remove-image';
-        removeBtn.innerHTML = '×';
-        removeBtn.onclick = () => removeImage(index, fileIndex);
-        imageItem.appendChild(img);
-        imageItem.appendChild(removeBtn);
-        previewContainer.appendChild(imageItem);
-    });
-    updateFileInput(index);
-}
-
-function removeImage(complaintIndex, imageIndex) {
-    imageArrays[complaintIndex].splice(imageIndex, 1);
-    rebuildPreview(complaintIndex);
-}
-
-function updateFileInput(index) {
-    const fileInput = document.querySelector(`input[name="images-${index}"]`);
-    const dt = new DataTransfer();
-    imageArrays[index].forEach(file => dt.items.add(file));
-    fileInput.files = dt.files;
-}
-
-function removeOldImage(imgId) {
-    // Hide the image immediately from UI
-    document.getElementById('old-img-' + imgId).style.display = 'none';
-    
-    // Add to removal list
-    const removeContainer = document.getElementById('removeImagesContainer');
-    const hiddenInput = document.createElement('input');
-    hiddenInput.type = 'hidden';
-    hiddenInput.name = 'remove_images';
-    hiddenInput.value = imgId;
-    removeContainer.appendChild(hiddenInput);
-}
-
-function formatSerial(input) {
-    input.value = input.value.replace(/[^A-Za-z]/g, '').toUpperCase();
+function appendPreviewImages(event, id) {
+  const container = document.getElementById("preview-" + id);
+  container.innerHTML = "";
+  Array.from(event.target.files).forEach(file => {
+    const reader = new FileReader();
+    reader.onload = e => {
+      const img = document.createElement("img");
+      img.src = e.target.result;
+      container.appendChild(img);
+    };
+    reader.readAsDataURL(file);
+  });
 }
 </script>
+
 </body>
 </html>
